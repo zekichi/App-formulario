@@ -18,3 +18,6 @@ def submit_form():
 
 if __name__ == '__main__':
     app.run(debug=True)
+
+from database import crear_tablas
+crear_tablas()  # Crea las tablas en la base de datos al iniciar la aplicación
