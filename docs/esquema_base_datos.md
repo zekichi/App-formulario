@@ -9,6 +9,8 @@
 | `email`       | String        | Email ingresado                    |
 | `fecha_envio` | DateTime      | Fecha automática de envío          |
 
+## 🔗 Código fuente ('models.py')
+
 
 ## 🔁 Relaciones previstas
 
