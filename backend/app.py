@@ -2,7 +2,7 @@
 
 from flask import Flask, request, jsonify # type: ignore
 from database import Session
-from models import Formulario
+from models import db, Formulario
 # from flask_cors import CORS # type: ignore
 
 app = Flask(__name__)
@@ -46,3 +46,11 @@ if __name__ == '__main__':
 from database import crear_tablas
 crear_tablas()  # Crea las tablas en la base de datos al iniciar la aplicación
 
+@app.route('/formularios', methods=['GET'])
+def obtener_formularios():
+    formularios = Formulario.query.all()
+    resultado = [
+        {'id': f.id, 'nombre': f.nombre, 'email': f.email}
+        for f in formularios
+    ]
+    return jsonify(resultado)

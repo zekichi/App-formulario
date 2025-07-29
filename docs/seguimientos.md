@@ -38,3 +38,7 @@
 ### 2025-07-04
 - Configuración de entorno virtual Python (venv)
 - Cración de backend y frontend
+
+### 2025-07-28
+- Endpoint: /submit
+    - Solicitud tipo POST
