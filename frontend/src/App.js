@@ -15,12 +15,17 @@ import ListadoFormularios from "./components/ListadoFormularios";
 
 function App(){
   return(
-    <div>
-      <h1>App de Formularios</h1>
-      <Formulario />
-      <hr />
-      <ListadoFormularios />
-    </div>
+    <>
+      <div>
+        <h1>App de Formularios</h1>
+        <Formulario />
+        <hr />
+        <ListadoFormularios />
+      </div>
+      <div className="bg-blue-500 text-white p-6 rounded">
+        ¡Tailwind está funcionando! 🎉
+      </div>
+    </>
   )
 }
 
