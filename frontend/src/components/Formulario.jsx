@@ -25,29 +25,33 @@ const Formulario = () => {
         },
     });
     return(
-        <form onSubmit={formik.handleSubmit}>
-            <label>Nombre:</label>
-            <input 
-                type = "text"
-                name = "nombre"
-                value={formik.values.nombre}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-            />
-            {formik.touched.nombre && formik.errors.nombre && <div>{formik.errors.nombre}</div>}
+        <div className="bg-yellow-50 border border-yellow-200 rounded-lg shadow-lg p-6 maw-w-xl mx-auto">
+            <form onSubmit={formik.handleSubmit}>
+                <label className='block text-lg font-serif text-yellow-900'>Nombre:</label>
+                <input 
+                    type = "text"
+                    name = "nombre"
+                    value={formik.values.nombre}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    className='w-full mt-1 p-2 border border-yellow-300 rounded-md bg-yellow-100 text-yellow-900 placeholder-yellow-700 focus:outline-none focus:ring-2 focus:ring-yellow-500'
+                />
+                {formik.touched.nombre && formik.errors.nombre && <div>{formik.errors.nombre}</div>}
 
-            <label>Email:</label>
-            <input
-                type = "email"
-                name = "email"
-                value={formik.values.email}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-            />
-            {formik.touched.email && formik.errors.email && <div>{formik.errors.email}</div>}
+                <label className='block text-lg font-serif text-yellow-900'>Email:</label>
+                <input
+                    type = "email"
+                    name = "email"
+                    value={formik.values.email}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    className='w-full mt-1 p-2 border border-yellow-300 rounded-md bg-yellow-100 text-yellow-900 placeholder-yellow-700 focus:outline-none focus:ring-2 focus:ring-yellow-500'
+                />
+                {formik.touched.email && formik.errors.email && <div>{formik.errors.email}</div>}
 
-            <button type="submit">Enviar</button>
-        </form>
+                <button type="submit" className='mt-4 px-4 py-2 bg-yellow-600 text-yellow-50 font-bold rounded-full shadow-md hover:bg-yellow-700 transition'>Enviar</button>
+            </form>
+        </div>
     );
 };
 
