@@ -16,4 +16,6 @@ const Layout = ({ children }) => {
             </footer>
         </div>
     )
-}
+};
+
+export default Layout;
