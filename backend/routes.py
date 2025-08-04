@@ -1,6 +1,6 @@
 # backend/routes.py
 
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify # type: ignore
 from database import Session
 from models import Formulario
 
