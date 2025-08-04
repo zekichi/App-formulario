@@ -25,31 +25,46 @@ const Formulario = () => {
         },
     });
     return(
-        <div className="bg-yellow-50 border border-yellow-200 rounded-lg shadow-lg p-6 maw-w-xl mx-auto">
-            <form onSubmit={formik.handleSubmit}>
-                <label className='block text-lg font-serif text-yellow-900'>Nombre:</label>
-                <input 
-                    type = "text"
-                    name = "nombre"
-                    value={formik.values.nombre}
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                    className='w-full mt-1 p-2 border border-yellow-300 rounded-md bg-yellow-100 text-yellow-900 placeholder-yellow-700 focus:outline-none focus:ring-2 focus:ring-yellow-500'
-                />
-                {formik.touched.nombre && formik.errors.nombre && <div>{formik.errors.nombre}</div>}
+        <div className="bg-yellow-50 border border-yellow-200 rounded-lg shadow-lg p-6 max-w-xl mx-auto">
+            <form onSubmit={formik.handleSubmit} className="space-y-6">
+                <div>
+                    <label className="block text-lg font-serif text-yellow-900 tracking-wide">Nombre:</label>
+                    <input
+                        type="text"
+                        name="nombre"
+                        value={formik.values.nombre}
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                        placeholder="Ingresá tu nombre"
+                        className="w-full mt-1 p-2 border border-yellow-300 rounded-md bg-yellow-100 text-yellow-900 placeholder-yellow-700 focus:outline-none focus:ring-2 focus:ring-yellow-500 shadow-inner"
+                    />
+                    {formik.touched.nombre && formik.errors.nombre && (
+                    <p className="text-sm text-red-600 mt-1 italic">{formik.errors.nombre}</p>
+                    )}
+                </div>
 
-                <label className='block text-lg font-serif text-yellow-900'>Email:</label>
-                <input
-                    type = "email"
-                    name = "email"
-                    value={formik.values.email}
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                    className='w-full mt-1 p-2 border border-yellow-300 rounded-md bg-yellow-100 text-yellow-900 placeholder-yellow-700 focus:outline-none focus:ring-2 focus:ring-yellow-500'
-                />
-                {formik.touched.email && formik.errors.email && <div>{formik.errors.email}</div>}
+                <div>
+                    <label className="block text-lg font-serif text-yellow-900 tracking-wide">Email:</label>
+                    <input
+                        type="email"
+                        name="email"
+                        value={formik.values.email}
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                        placeholder="ejemplo@correo.com"
+                        className="w-full mt-1 p-2 border border-yellow-300 rounded-md bg-yellow-100 text-yellow-900 placeholder-yellow-700 focus:outline-none focus:ring-2 focus:ring-yellow-500 shadow-inner"
+                    />
+                    {formik.touched.email && formik.errors.email && (
+                        <p className="text-sm text-red-600 mt-1 italic">{formik.errors.email}</p>
+                    )}
+                </div>
 
-                <button type="submit" className='mt-4 px-4 py-2 bg-yellow-600 text-yellow-50 font-bold rounded-full shadow-md hover:bg-yellow-700 transition'>Enviar</button>
+                <button
+                type="submit"
+                className="mt-4 px-6 py-2 bg-yellow-600 text-yellow-50 font-bold rounded-full shadow-md hover:bg-yellow-700 transition-all duration-300"
+                >
+                Enviar
+                </button>
             </form>
         </div>
     );

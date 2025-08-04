@@ -17,31 +17,32 @@ const ListadoFormularios = () => {
     }, []);
 
     return (
-        <div className="bg-[#fdf6d3] min-h-screen p-10 font-serif">
-            <h2 className="text-3xl text-[#7e4a35] mb-6 border-b border-[bfae9b] pb-2 font-bold">
+       <div className="bg-yellow-50 min-h-screen p-10 font-serif">
+            <h2 className="text-3xl text-yellow-900 mb-6 border-b border-yellow-300 pb-2 font-bold tracking-tight">
                 Listado de Formularios
             </h2>
-            <div className="overflow-x-auto shadow-lg rounded-lg border border-[#bfae9b] bg-white">
-                <table className="min-w--full table-auto">
-                    <thead className="bg-[#bfae9b] text-white">
-                        <tr>
-                            <th className="text-left px-4 py-3 font-medium tracking-wide">ID</th>
-                            <th className="text-left px-4 py-3 font-medium tracking-wide">Nombre</th>
-                            <th className="text-left px-4 py-3 font-medium tracking-wide">Email</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {formularios.map((f) => (
-                            <tr key={f.id} className="border-t border-[#eee] hover:bg-[#faf3dd]">
-                                <td className="px-4 py-3 text-[#3c3c3c]">{f.id}</td>
-                                <td className="px-4 py-3 text-[#3c3c3c]">{f.nombre}</td>
-                                <td className="px-4 py-3 text-[#3c3c3c]">{f.email}</td>
-                            </tr>
-                        ))}
-                    </tbody>
+
+            <div className="overflow-x-auto shadow-lg rounded-lg border border-yellow-300 bg-white">
+                <table className="min-w-full table-auto">
+                <thead className="bg-yellow-300 text-yellow-50">
+                    <tr>
+                    <th className="text-left px-4 py-3 font-medium tracking-wide">ID</th>
+                    <th className="text-left px-4 py-3 font-medium tracking-wide">Nombre</th>
+                    <th className="text-left px-4 py-3 font-medium tracking-wide">Email</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {formularios.map((f) => (
+                    <tr key={f.id} className="border-t border-yellow-100 hover:bg-yellow-100">
+                        <td className="px-4 py-3 text-yellow-800">{f.id}</td>
+                        <td className="px-4 py-3 text-yellow-800">{f.nombre}</td>
+                        <td className="px-4 py-3 text-yellow-800">{f.email}</td>
+                    </tr>
+                    ))}
+                </tbody>
                 </table>
             </div>
-        </div>
+            </div>
     );
 };
 
