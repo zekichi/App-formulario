@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, DateTime # type: ignore
+from sqlalchemy import Column, Integer, String, DateTime, Text # type: ignore
 from sqlalchemy.ext.declarative import declarative_base # type: ignore
 from datetime import datetime
 
@@ -11,3 +11,4 @@ class Formulario(Base):
     nombre = Column(String, nullable=False)
     email = Column(String, nullable=False)
     fecha_envio = Column(DateTime, default=datetime.utcnow)
+    mensaje = Column(Text)
