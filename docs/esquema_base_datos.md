@@ -7,7 +7,7 @@
 | `id`          | Integer       | Clave primaria autoincremental     |
 | `nombre`      | String        | Nombre ingresado por el usuario    |
 | `email`       | String        | Email ingresado                    |
-| `fecha_envio` | DateTime      | Fecha automática de envío          |
+| `mensaje`     | TEXT          | mensaje del form        |
 
 ## 🔗 Código fuente ('models.py')
 
