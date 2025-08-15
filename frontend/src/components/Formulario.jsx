@@ -8,10 +8,12 @@ const Formulario = () => {
         initialValues: {
             nombre: '',
             email: '',
+            mensaje: '',
         },
         validationSchema: Yup.object({
             nombre: Yup.string().required('El nombre es obligatorio'),
             email: Yup.string().email('El email no es válido').required('El email es obligatorio'),
+            mensaje: Yup.string().required('El mensaje es obligatorio'),
         }),
         onSubmit: async (values, { resetForm }) => {
             try { 
@@ -56,6 +58,21 @@ const Formulario = () => {
                     />
                     {formik.touched.email && formik.errors.email && (
                         <p className="text-sm text-red-600 mt-1 italic">{formik.errors.email}</p>
+                    )}
+                </div>
+
+                <div>
+                    <label className="block text-lg font-serif text-yellow-900 tracking-wide">Mensaje:</label>
+                    <textarea
+                        name="mensaje"
+                        value={formik.values.mensaje}
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                        placeholder="Escribí tu mensaje ..."
+                        className="w-full mt-1 p-2 border border-yellow-300 rounded-md bg-yellow-100 text-yellow-900 placeholder-yellow-700 focus:outline-none focus:ring-2 focus:ring-yellow-500 shadow-inner resize-none"
+                    />
+                    {formik.touched.mensaje && formik.errors.mensaje && (
+                        <p className="text-sm text-red-600 mt-1 italic">{formik.errors.mensaje}</p>
                     )}
                 </div>
 
