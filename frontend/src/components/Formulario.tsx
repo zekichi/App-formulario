@@ -1,20 +1,26 @@
 import { useState } from 'react';
 
+type FormData = {
+    nombre: string;
+    email: string;
+    mensaje: string;
+};
+
 export default function Formulario() {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     nombre: '',
     email: '',
     mensaje: '',
   });
 
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log('Datos enviados:', formData);
-    // Podés agregar lógica de envío aquí
+    // Para agregar lógica de envío, aquí
   };
 
   return (
@@ -55,7 +61,7 @@ export default function Formulario() {
         <textarea
           name="mensaje"
           id="mensaje"
-          rows="4"
+          rows={4}
           value={formData.mensaje}
           onChange={handleChange}
           className="w-full p-2 border border-sombra rounded bg-fondo text-texto"
