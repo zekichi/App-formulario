@@ -1,14 +1,16 @@
-from sqlalchemy import Column, Integer, String, DateTime, Text # type: ignore
-from sqlalchemy.ext.declarative import declarative_base # type: ignore
+# backend/models.py
+
+from database import db
 from datetime import datetime
 
-Base = declarative_base()
-
-class Formulario(Base):
+class Formulario(db.Model):
     __tablename__ = 'formularios'
 
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    nombre = Column(String, nullable=False)
-    email = Column(String, nullable=False)
-    fecha_envio = Column(DateTime, default=datetime.utcnow)
-    mensaje = Column(Text)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    nombre = db.Column(db.String(100), nullable=False)
+    email = db.Column(db.String(120), nullable=False)
+    mensaje = db.Column(db.Text, nullable=True)
+    fecha_envio = db.Column(db.DateTime, default=datetime.utcnow)
+
+    def __repr__(self):
+        return f"<Formulario {self.id} - {self.nombre}>"

@@ -1,14 +1,17 @@
-from sqlalchemy import create_engine # pyright: ignore[reportMissingImports]
-from sqlalchemy.orm import sessionmaker # type: ignore
-from models import Base
-from dotenv import load_dotenv # type: ignore
+# backend/database.py
+
+from flask_sqlalchemy import SQLAlchemy
+from dotenv import load_dotenv
 import os
 
+# Carga variables de entorno desde .env
 load_dotenv()
-DATABASE_URL = os.getenv('DATABASE_URL')
 
-engine = create_engine(DATABASE_URL)
-Session = sessionmaker(bind=engine)
+# Instancia global de SQLAlchemy
+db = SQLAlchemy()
 
+# Función para crear las tablas dentro del contexto Flask
 def crear_tablas():
-    Base.metadata.create_all(engine)
+    from app import app  # Importación local para evitar ciclos
+    with app.app_context():
+        db.create_all()
