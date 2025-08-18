@@ -1,14 +1,11 @@
-import { fontFamily } from 'tailwindcss/defaultTheme'
-
+/** @type {import('tailwindcss').Config} */
 export default {
-    theme: {
-        extend: {
-            fontFamily: {
-                sans: ['Playfair Display', ...fontFamily.sans],
-            },
-            colors: {
-                acento: '#7e4a35'
-            },
-        },
-    },
+  content: [
+    "./index.html"
+  ],
+  theme: {
+    extend: {},
+  },
+  plugins: [],
 }
+
