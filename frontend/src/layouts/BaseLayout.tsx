@@ -1,6 +1,7 @@
 // scr/layouts/BaseLayout.tsx
 
 import React from "react";
+import Footer from "../components/Footer";
 
 type BaseLayoutProps = {
     children: React.ReactNode;
@@ -15,9 +16,7 @@ const BaseLayout = ({ children }: BaseLayoutProps) => {
             <main className="flex-grow flex items-center justify-center">
                 {children}
             </main>
-            <footer className="text-center py-4 text-sm opacity-60">
-                © 2025 - Proyecto de ejemplo
-            </footer>
+            <Footer />
         </div>
     )
 };
