@@ -2,7 +2,31 @@
 
 from flask import Blueprint, request, jsonify
 from database import db
-from models import Formulario, User, db
+from models import Formulario, User
+from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
+
+auth_bp = Blueprint('auth', __name__, url_prefix='/api/auth')
+
+@auth_bp.route('/register', methods=['POST'])
+def register():
+    data = request.get_json()
+    if User.query.filter_by(email=data['email']).first():
+        return jsonify({"error": "email ya registrado"}), 400
+
+    user = User(email=data['email'])
+    user.set_password(data['password'])
+    db.session.add(user)
+    db.session.commit()
+    return jsonify({"message": "Usuario creado"}), 201
+
+@auth_bp.route('/login', methods=['POST'])
+def login():
+    data = request.get_json()
+    user = User.query.filter_by(email=data['email']).first()
+    if user and user.check_password(data['password']):
+        token = create_access_token(identity=user.id)
+        return jsonify({"access_token": token}), 200
+    return jsonify({"error": "Credenciales inválidas"}), 401
 
 formulario_bp = Blueprint('formulario', __name__)
 
