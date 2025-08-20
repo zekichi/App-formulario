@@ -31,7 +31,9 @@ def login():
 formulario_bp = Blueprint('formulario', __name__)
 
 @formulario_bp.route('/submit', methods=['POST'])
+@jwt_required()
 def submit_form():
+    user_id = get_jwt_identity()
     data = request.get_json()
     nombre = data.get('nombre')
     email = data.get('email')
@@ -50,7 +52,7 @@ def submit_form():
         db.session.rollback()
         return jsonify({"error": str(e)}), 500
 
-@formulario_bp.route('/formularios', methods=['GET'])
+@formulario_bp.route('/forms', methods=['GET'])
 def obtener_formularios():
     formularios = Formulario.query.order_by(Formulario.fecha_envio.desc()).all()
     resultado = [

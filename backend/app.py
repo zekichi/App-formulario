@@ -2,8 +2,9 @@
 
 from flask import Flask, redirect
 from flask_cors import CORS
+from flask_jwt_extended import JWTManager
 from database import db
-from routes import formulario_bp
+from routes import auth_bp, formulario_bp
 from dotenv import load_dotenv
 import os
 
@@ -19,8 +20,13 @@ app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv(
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
+app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET', 'cambiaesta_clave')
+jwt = JWTManager(app)
+
+app.register_blueprint(auth_bp)
+app.register_blueprint(formulario_bp, url_prefix='/api/forms')
+
 db.init_app(app)
-app.register_blueprint(formulario_bp)
 
 # 👇 Mover esta función arriba
 def crear_tablas():
