@@ -2,7 +2,7 @@
 
 from flask import Blueprint, request, jsonify
 from database import db
-from models import Formulario
+from models import Formulario, User, db
 
 formulario_bp = Blueprint('formulario', __name__)
 
