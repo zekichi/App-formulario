@@ -14,6 +14,12 @@ class User(db.Model):
     password_hash = db.Column(db.String(128), nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
+    formularios = db.relationship(
+        'Formulario',
+        back_populates='owner',
+        cascade='all, delete-orphan'
+    )
+
     def set_password(self, password):
         self.password_hash = bcrypt.generate_password_hash(password).decode()
 
@@ -28,6 +34,11 @@ class Formulario(db.Model):
     email = db.Column(db.String(120), nullable=False)
     mensaje = db.Column(db.Text, nullable=True)
     fecha_envio = db.Column(db.DateTime, default=datetime.utcnow)
+
+    # Nueva columna: relación con usuario
+
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    owner = db.relationship('User', back_populates='formularios')
 
     def __repr__(self):
         return f"<Formulario {self.id} - {self.nombre}>"
