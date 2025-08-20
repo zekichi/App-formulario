@@ -1,14 +1,14 @@
 // frontend/App.tsx
 
 import './App.css'
-import { BrowserRoutes, Routes, Route, Navigate } from 'react-router-dom';
-import { AuthProvider, useAuth } from './context/AuthContext';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { AuthProvider, useAuth } from './context/AuthContext.tsx';
 import type { JSX } from 'react/jsx-dev-runtime';
-import Home from './components/Home';
-import Login from './components/Login';
-import Register from './components/Register';
-import Dashboard from './components/Dashboard';
-import NewForm from './components/NewForm';
+import Home from './components/Home.tsx';
+import Login from './components/Login.tsx';
+// import Register from './components/Register';
+// import Dashboard from './components/Dashboard';
+// import NewForm from './components/NewForm';
 
 function PrivateRoute({ children }: { children: JSX.Element }) {
   const { token } = useAuth();
@@ -18,7 +18,7 @@ function PrivateRoute({ children }: { children: JSX.Element }) {
 export default function App(){
   return (
     <AuthProvider>
-      <BrowserRoutes>
+      <BrowserRouter>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="register" element={<Register />} />

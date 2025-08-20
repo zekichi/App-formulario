@@ -70,3 +70,29 @@ FLASK_ENV=development
 
 ### frontend/.env.local
 VITE_API_URL=http://localhost:5000/api
+
+
+## 5. Configuracines Clave
+
+- Flask (app.py):
+    - db.init_app(app), blueprints: auth_bp, formulario_bp
+    - Carga de .env con python-dotenv
+- SQLAlchemy (database.py):
+    - Exporta db y función crear_tablas()
+- Modelos(models.py):
+    - User y Formulario con relación Usuario-Formularios
+- Migraciones:
+    - Flask-Migrate o Alembic configurado
+- Vite (vite.config.js):
+    - Proxy /api -> http://localhost:5000
+- Tailwind (tailwind.config.js):
+    - Paleta: fondo, borde, acento, texto, blanco con #
+    - Fuente: "Libre Bakersville" o "Playfair Display"
+
+## 6. Roadmap de Funcionalidades
+
+1. Ajustar models.py y generar migraciones para incluir user_id en formulario
+2. Crear páginas React y estilizar con paleta retro
+3. Integrar Formik + Yup en Register/Login y creación de formularios
+4. Proteger rutas con JWT (AuthContext + PrivateRoute)
+5. Probar flujo completo: registro -> login -> crear formulario -> ver Dashboard
