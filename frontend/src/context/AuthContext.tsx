@@ -1,7 +1,9 @@
 import { createContext, useContext, useState } from "react";
+import axios from 'axios';
 
 type AuthContextData = {
     token: string | null;
+    register: (email: string, password: string) => Promise<void>;
     login: (email: string, password: string) => Promise<void>;
     logout: () => void;
 };
@@ -13,14 +15,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }){
         localStorage.getItem('token')
     );
 
-    const login = async (email: string, password: string) => {
-        const res = await fetch('/api/auth/login', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email, password}),
-        });
+    const api = axios.create({
+        baseURL: import.meta.env.VITE_API_URL,
+        headers: { Authorization: token ? `Bearer ${token}` : '' },
+    });
 
-        const data = await res.json();
+    const register = async (email: string, password: string) => {
+        await api.post('/auth/register', { email, password });
+    };
+
+    const login = async (email: string, password: string) => {
+        const { data } = await api.post('/auth/login', { email, password });
         setToken(data.access_token);
         localStorage.setItem('token', data.access_token);
     };
@@ -31,7 +36,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }){
     };
 
     return (
-        <AuthContext.Provider value={{ token, login, logout }}>
+        <AuthContext.Provider value={{ token, register, login, logout }}>
             {children}
         </AuthContext.Provider>
     );
