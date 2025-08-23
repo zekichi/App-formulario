@@ -6,6 +6,7 @@ import PrivateRoute from './components/PrivateRoute';
 import Home from './components/Home';
 import Login from './components/Login';
 import Register from './components/Register';
+import Dashboard from './components/Dashboard';
 // más páginas después…
 
 export default function App() {
@@ -20,7 +21,7 @@ export default function App() {
             path="/dashboard"
             element={
               <PrivateRoute>
-                {/* <Dashboard /> */}
+                <Dashboard />
               </PrivateRoute>
             }
           />
