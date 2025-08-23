@@ -5,6 +5,8 @@ from database import db
 from models import Formulario, User
 from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
 
+# --------- auth_bp ---------
+
 auth_bp = Blueprint('auth', __name__, url_prefix='/api/auth')
 
 @auth_bp.route('/register', methods=['POST'])
@@ -27,6 +29,10 @@ def login():
         token = create_access_token(identity=user.id)
         return jsonify({"access_token": token}), 200
     return jsonify({"error": "Credenciales inválidas"}), 401
+
+
+ 
+# --------- formulario_bp ---------
 
 formulario_bp = Blueprint('formulario', __name__)
 

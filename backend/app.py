@@ -21,6 +21,8 @@ app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv(
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
+# --------- JWTManager ---------
+
 app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET', 'cambiaesta_clave')
 jwt = JWTManager(app)
 
@@ -28,6 +30,8 @@ app.register_blueprint(auth_bp)
 app.register_blueprint(formulario_bp, url_prefix='/api/forms')
 
 db.init_app(app)
+
+# --------- Migrate ---------
 
 Migrate = Migrate(app, db)
 

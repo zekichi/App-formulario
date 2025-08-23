@@ -77,14 +77,22 @@ VITE_API_URL=http://localhost:5000/api
 - Flask (app.py):
     - db.init_app(app), blueprints: auth_bp, formulario_bp
     - Carga de .env con python-dotenv
+    - Integración de Flask-migrate para migraciones 
+
 - SQLAlchemy (database.py):
     - Exporta db y función crear_tablas()
+
 - Modelos(models.py):
-    - User y Formulario con relación Usuario-Formularios
+    - User: emial, passwor_hash, relación con formularios
+    - Formulario: nombre, email, mensaje, fecha_envio, user_id (ForeignKey)
+
 - Migraciones:
-    - Flask-Migrate o Alembic configurado
+    - Inicializadas con Flask-Migrate
+    - Migración creada: "Agregar user_id a formularios"
+    
 - Vite (vite.config.js):
     - Proxy /api -> http://localhost:5000
+
 - Tailwind (tailwind.config.js):
     - Paleta: fondo, borde, acento, texto, blanco con #
     - Fuente: "Libre Bakersville" o "Playfair Display"
@@ -96,3 +104,20 @@ VITE_API_URL=http://localhost:5000/api
 3. Integrar Formik + Yup en Register/Login y creación de formularios
 4. Proteger rutas con JWT (AuthContext + PrivateRoute)
 5. Probar flujo completo: registro -> login -> crear formulario -> ver Dashboard
+
+## 7. Avances Implementados
+
+- 🔹Backend:
+    - Modelo 'User' con contraseñla encriptada y relación con 'Formularios'
+    - Modelo 'Formulario' vindulado a 'user_id'
+    - Blueprint 'auth_bp' con endpoints '/register' y '/login'
+    - JWT configurado con 'JST_SECRET'
+    - Migraciones generadas y aplicadas con Flask-Migrate
+
+- 🔹Frontend:
+    - Páginas creadas: 'Home.tsx', 'Login.tsx', 'Register.tsx'
+    - Estilizadas con Tailwind y paletas retro
+    - Validación con Formik + Yup
+    - Contexto de autenticación ('AuthContext.tsx')
+    - Rutas protegidas con 'PrivateRoute.tsx'
+    - Navegación con React Router v6
