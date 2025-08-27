@@ -1,8 +1,8 @@
 # backend/routes.py
 
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, json, request, jsonify
 from database import db
-from models import Formulario, User
+from models import Formulario, User, Pregunta
 from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
 
 # --------- auth_bp ---------
@@ -78,3 +78,30 @@ def eliminar_formulario(id):
     db.session.delete(formulario)
     db.session.commit()
     return jsonify({"message": "Eliminado"}), 200
+
+@formulario_bp.route('/crear', methods=['POST'])
+@jwt_required()
+def crear_formulario():
+    user_id = get_jwt_identity()
+    data = request.get_json()
+
+    nuevo_formulario = Formulario(
+        nombre=data['nombre'],
+        email=data['email'],
+        mensaje=data.get('mensaje'),
+        user_id=user_id
+    )
+    db.session.add(nuevo_formulario)
+    db.session.flush() # Para obtener el ID antes del commit
+
+    for p in data.get('preguntas', []):
+        pregunta = Pregunta(
+            texto=p['texto'],
+            tipo=p['tipo'],
+            opciones=json.dumps(p.get('opciones', [])),
+            formulario_id=nuevo_formulario.id
+        )
+        db.session.add(pregunta)
+
+    db.session.commit()
+    return jsonify({"message": "Formulario creado con preguntas"}), 201

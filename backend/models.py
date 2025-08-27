@@ -42,3 +42,18 @@ class Formulario(db.Model):
 
     def __repr__(self):
         return f"<Formulario {self.id} - {self.nombre}>"
+
+    preguntas = db.relationship('Pregunta', back_populates='formulario')
+
+class Pregunta(db.Model):
+    __tablename__ = 'preguntas'
+
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    texto = db.Column(db.String(255), nullable=False)
+    tipo = db.Column(db.String(50), nullable=False)  # e.g., 'texto', 'opcion_multiple'
+
+    opciones = db.Column(db.Text)  # JSON string si lo aplica
+
+    formulario_id = db.Column(db.Integer, db.ForeignKey('formularios.id'), nullable=False)
+
+    formulario = db.relationship('Formulario', back_populates='preguntas')

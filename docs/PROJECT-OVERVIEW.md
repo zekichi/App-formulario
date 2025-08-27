@@ -117,13 +117,17 @@ VITE_API_URL=http://localhost:5000/api
     - Modelo 'User' con contraseñla encriptada y relación con 'Formularios'
     - Modelo 'Formulario' vindulado a 'user_id'
     - Blueprint 'auth_bp' con endpoints '/register' y '/login'
-    - JWT configurado con 'JST_SECRET'
+    - Blueprine 'formulario_bp' con endpoints '/submit', '/forms', '/eliminar/<id>'
+    - JWT configurado con 'JwT_SECRET'
     - Migraciones generadas y aplicadas con Flask-Migrate
+    - Enpoint protegido con '@jwt_required()' para envío y eliminación de formularios
 
 - 🔹Frontend:
-    - Páginas creadas: 'Home.tsx', 'Login.tsx', 'Register.tsx'
-    - Estilizadas con Tailwind y paletas retro
-    - Validación con Formik + Yup
-    - Contexto de autenticación ('AuthContext.tsx')
+    - Páginas creadas: 'Home.tsx', 'Login.tsx', 'Register.tsx', 'Dashboard.tsx', 'NewForm.tsx'
+    - Estilizadas con Tailwind y paletas retro (fondo, borde, acento, texto, blanco)
+    - Validación con Formik + Yup en login, registro y creación de formularios
+    - Contexto de autenticación ('AuthContext.tsx') con login, register, logout
     - Rutas protegidas con 'PrivateRoute.tsx'
     - Navegación con React Router v6
+    - Envío de formularios con JWT en header 'Authorization'
+    - Listado de formularios en 'Dashboard.tsx' con opción de eliminar
