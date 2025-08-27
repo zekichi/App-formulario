@@ -49,9 +49,24 @@ export default function Dashboard() {
                         <p className="text-sm opacity-80">{f.email}</p>
                         <p className="text-sm mt-2">{f.mensaje}</p>
                         <p className="text-sm mt-1 text-right text-texto">{f.fecha_envio}</p>
+                        <button
+                            onClick={() => {
+                                fetch(`${import.meta.env.VITE_API_URL}/forms/${f.id}`, {
+                                    method: 'DELETE',
+                                    headers: {
+                                        Authorization: `Bearer ${token}`
+                                        },
+                            }).then(() => {
+                                setFormularios((prev) => prev.filter((items) => items.id !== f.id));
+                            });
+                            }}
+                        >
+                            Eliminar
+                        </button>
                     </li>
                 )}
             </ul>
+           
         </div>
     );
 }

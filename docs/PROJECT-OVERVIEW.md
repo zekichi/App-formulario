@@ -103,7 +103,13 @@ VITE_API_URL=http://localhost:5000/api
 2. Crear páginas React y estilizar con paleta retro
 3. Integrar Formik + Yup en Register/Login y creación de formularios
 4. Proteger rutas con JWT (AuthContext + PrivateRoute)
-5. Probar flujo completo: registro -> login -> crear formulario -> ver Dashboard
+5. Crear Dashboard.tsx con listado de formularios
+6. Crear NewForm.tsx para generar formularios dinámicos
+7. Acñadir lógica de envío al backend con JWT
+8. Mostrar respuestas y permitir eliminar formularios
+9. 🔜 Crear modelo de preguntas dinámicas para formularios personalizados
+10. 🔜 Visualizar respuestas con gráficas (Charts.js / Recharts)
+11. 🔜 Exportar reportes en PDF (jsPDF /PDFMake)
 
 ## 7. Avances Implementados
 
