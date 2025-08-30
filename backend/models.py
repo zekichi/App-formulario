@@ -43,7 +43,7 @@ class Formulario(db.Model):
     def __repr__(self):
         return f"<Formulario {self.id} - {self.nombre}>"
 
-    preguntas = db.relationship('Pregunta', back_populates='formulario')
+    preguntas = db.relationship('Pregunta', back_populates='formulario', cascade='all, delete-orphan')
 
 class Pregunta(db.Model):
     __tablename__ = 'preguntas'

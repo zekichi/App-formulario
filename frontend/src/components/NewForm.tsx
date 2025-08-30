@@ -3,6 +3,7 @@ import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
 
 const schema = Yup.object().shape({
     nombre: Yup.string().required('Requerido'),
@@ -13,6 +14,9 @@ const schema = Yup.object().shape({
 export default function NewForm() {
     const { token } = useAuth();
     const navigate = useNavigate();
+    const [preguntas, setPreguntas] = useState([
+        { texto: '', tipo: 'texto', opciones: []}
+    ]);
 
     return (
         <div className="min-h-screen bg-fondo font-serif text-texto flex items-center justify-center p-6">

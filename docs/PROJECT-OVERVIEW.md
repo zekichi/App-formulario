@@ -1,23 +1,19 @@
-# PROJECT-OVERVIEW
+# Resumen Completo del Proyecto
 
-## 1. Descripción del Proyecto
+## 1. Descripción General
 
-App-Formularios es una plataforma fullstack para:
-- Crear formularios personalizados
-- Almacenar respuestas en PostgreSQL
-- Visualizar datos mediante gráficas y reportes PDF
-- Ofrecer una experiencia retro, con tipografías serif y paleta de colores suaves
+App-Formularios es una plataforma fullstack para crear formularios personalizados, almacenar respuestas en PostgreSQL y visualizar datos mediante gráficas y reportes PDF. Ofrece una experiencia retro, con tipografías serif y paleta de colores suaves. El proyecto está orientado tanto a fines educativos como administrativos.
 
 ## 2. Stack Tecnológico
 
-### Frontend
+**Frontend:**
 - React 19.x + Vite
 - Tailwind CSS (configuración retro)
 - React Router v6
 - Formik + Yup (validación)
 - Axios (comunicaciones HTTP)
 
-### Backend
+**Backend:**
 - Python 3.x + Flask 3.x
 - Flask-RESTful / Blueprints
 - SQLAlchemy (ORM)
@@ -25,8 +21,15 @@ App-Formularios es una plataforma fullstack para:
 - Flask-CORS / Flask-JWT-Extended (CORS y autenticación)
 - Waitress o Gunicorn (servidor WSGI)
 
+**Infraestructura:**
+- GitHub (repositorio y versionado)
+- Vercel / Netlify (frontend)
+- Render / Railway (backend)
+- ElephantSQL / Supabase (base de datos)
+
 ## 3. Estructura de Carpetas
 
+```
 /
 ├─ .env.example
 ├─ README.md
@@ -59,75 +62,74 @@ App-Formularios es una plataforma fullstack para:
 │        └─ AuthContext.tsx
 └─ docs/
    └─ PROJECT_OVERVIEW.md
-
+```
 
 ## 4. Variables de Entorno
 
-### backend/.env.backend
+**backend/.env.backend**
+```
 DATABASE_URL=postgresql://<user>:<pass>@localhost:5432/formularios_db
 JWT_SECRET=<clave-secreta-para-jwt>
 FLASK_ENV=development
+```
 
-### frontend/.env.local
+**frontend/.env.local**
+```
 VITE_API_URL=http://localhost:5000/api
+```
 
+## 5. Infraestructura y Configuración
 
-## 5. Configuracines Clave
+- Migraciones gestionadas con Flask-Migrate y Alembic.
+- Proxy en Vite para redirigir `/api` al backend.
+- Tailwind CSS configurado con paleta retro y fuente "Libre Baskerville".
+- Documentación en `/docs` sobre el esquema de base de datos, configuración de entorno y metodología Scrum.
 
-- Flask (app.py):
-    - db.init_app(app), blueprints: auth_bp, formulario_bp
-    - Carga de .env con python-dotenv
-    - Integración de Flask-migrate para migraciones 
+## 6. Funcionalidades Clave
 
-- SQLAlchemy (database.py):
-    - Exporta db y función crear_tablas()
+- Registro y login de usuarios con JWT.
+- Creación, listado y eliminación de formularios.
+- Relación entre usuarios y formularios.
+- Validación de datos tanto en frontend como en backend.
+- Preparado para agregar preguntas dinámicas y exportar reportes.
 
-- Modelos(models.py):
-    - User: emial, passwor_hash, relación con formularios
-    - Formulario: nombre, email, mensaje, fecha_envio, user_id (ForeignKey)
+## 7. Roadmap y Avances
 
-- Migraciones:
-    - Inicializadas con Flask-Migrate
-    - Migración creada: "Agregar user_id a formularios"
-    
-- Vite (vite.config.js):
-    - Proxy /api -> http://localhost:5000
-
-- Tailwind (tailwind.config.js):
-    - Paleta: fondo, borde, acento, texto, blanco con #
-    - Fuente: "Libre Bakersville" o "Playfair Display"
-
-## 6. Roadmap de Funcionalidades
-
+**Roadmap:**
 1. Ajustar models.py y generar migraciones para incluir user_id en formulario
 2. Crear páginas React y estilizar con paleta retro
 3. Integrar Formik + Yup en Register/Login y creación de formularios
 4. Proteger rutas con JWT (AuthContext + PrivateRoute)
 5. Crear Dashboard.tsx con listado de formularios
 6. Crear NewForm.tsx para generar formularios dinámicos
-7. Acñadir lógica de envío al backend con JWT
+7. Añadir lógica de envío al backend con JWT
 8. Mostrar respuestas y permitir eliminar formularios
-9. 🔜 Crear modelo de preguntas dinámicas para formularios personalizados
-10. 🔜 Visualizar respuestas con gráficas (Charts.js / Recharts)
-11. 🔜 Exportar reportes en PDF (jsPDF /PDFMake)
+9. Crear modelo Pregunta para formularios personalizados
+10. Crear endpoint /forms/crear que recibe preguntas dinámicas
+11. Visualizar respuestas con gráficas (Charts.js / Recharts)
+12. Exportar reportes en PDF (jsPDF /PDFMake)
 
-## 7. Avances Implementados
+**Avances Implementados:**
+- Modelo 'User' con contraseña encriptada y relación con 'Formularios'
+- Modelo 'Formulario' vinculado a 'user_id'
+- Blueprint 'auth_bp' con endpoints '/register' y '/login'
+- Blueprint 'formulario_bp' con endpoints '/submit', '/forms', '/eliminar/<id>'
+- JWT configurado con 'JWT_SECRET'
+- Migraciones generadas y aplicadas con Flask-Migrate
+- Endpoint protegido con '@jwt_required()' para envío y eliminación de formularios
+- Páginas creadas: 'Home.tsx', 'Login.tsx', 'Register.tsx', 'Dashboard.tsx', 'NewForm.tsx'
+- Estilizadas con Tailwind y paletas retro
+- Validación con Formik + Yup en login, registro y creación de formularios
+- Contexto de autenticación ('AuthContext.tsx') con login, register, logout
+- Rutas protegidas con 'PrivateRoute.tsx'
+- Navegación con React Router v6
+- Envío de formularios con JWT en header 'Authorization'
+- Listado de formularios en 'Dashboard.tsx' con opción de eliminar
 
-- 🔹Backend:
-    - Modelo 'User' con contraseñla encriptada y relación con 'Formularios'
-    - Modelo 'Formulario' vindulado a 'user_id'
-    - Blueprint 'auth_bp' con endpoints '/register' y '/login'
-    - Blueprine 'formulario_bp' con endpoints '/submit', '/forms', '/eliminar/<id>'
-    - JWT configurado con 'JwT_SECRET'
-    - Migraciones generadas y aplicadas con Flask-Migrate
-    - Enpoint protegido con '@jwt_required()' para envío y eliminación de formularios
+## 8. Documentación y Archivos Relevantes
 
-- 🔹Frontend:
-    - Páginas creadas: 'Home.tsx', 'Login.tsx', 'Register.tsx', 'Dashboard.tsx', 'NewForm.tsx'
-    - Estilizadas con Tailwind y paletas retro (fondo, borde, acento, texto, blanco)
-    - Validación con Formik + Yup en login, registro y creación de formularios
-    - Contexto de autenticación ('AuthContext.tsx') con login, register, logout
-    - Rutas protegidas con 'PrivateRoute.tsx'
-    - Navegación con React Router v6
-    - Envío de formularios con JWT en header 'Authorization'
-    - Listado de formularios en 'Dashboard.tsx' con opción de eliminar
+- `README.md`: Introducción y stack tecnológico.
+- `docs/PROJECT-OVERVIEW.md`: Resumen y roadmap.
+- `docs/esquema_base_datos.md`: Esquema de la base de datos.
+- `docs/scrum-plan.md`: Planificación ágil y sprints.
+- `docs/listado-formularios.md`: Flujo de datos y ejemplo de respuesta.
