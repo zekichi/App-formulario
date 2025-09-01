@@ -19,7 +19,7 @@ export const usePreguntasForm = () => {
 
     const eliminarPregunta = (id:string) => {
         setPreguntas (prev => prev.filter(p => p.id !== id));
-        const { [id]: _, ...restOpciones } = opcionesPregunta;
+        const { [id]: _, ...restOpciones } = opcionesPorPregunta;
         setOpcionesPorPregunta(restOpciones);
     };
 

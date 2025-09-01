@@ -6,7 +6,7 @@ export interface Pregunta {
     texto: string;
     tipo: PreguntaTipo;
     opciones: string[];
-    required: boolen;
+    required: boolean;
 }
 
 export interface FormularioValues {

@@ -3,18 +3,10 @@ import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
-import { use, useState } from 'react';
-
-// Separar tipos en un archivo types.ts
-type PreguntaTipo = 'texto' | 'checkbox' | 'radio';
-
-interface Pregunta {
-    id: string; // Agregar ID único
-    texto: string;
-    tipo: PreguntaTipo;
-    opciones: string[];
-    required: boolean; // Agregar campo requerido
-}
+import { useState } from 'react';
+import { usePreguntasForm } from '../hooks/usePreguntasForm';
+import { PreguntaForm } from './formularios/PreguntaForm';
+import type { FormularioValues, Pregunta } from '../types/formulario';
 
 // Esquema de validación para el formulario principal
 const schema = Yup.object().shape({
@@ -40,105 +32,111 @@ const schema = Yup.object().shape({
     )
 });
 
-// Agregar hooks personalizados
-const usePreguntasForm = () => {
-    const [preguntas, setPreguntas] = useState<Pregunta[]>([]);
-    
-    const agregarPregunta = () => {
-        setPreguntas(prev => [...prev, {
-            id: crypto.randomUUID(),
-            texto: '',
-            tipo: 'texto',
-            opciones: [],
-            required: false
-        }]);
-    };
-
-    // Eliminar pregunta específica
-    const eliminarPregunta = (index: number) => {
-        setPreguntas(preguntas.filter((_, i) => i !== index));
-    };
-
-    // Actualizar los campos de una pregunta
-    const actualizarPregunta = (index: number, campo: keyof Pregunta, valor:string) => {
-        const nuevasPreguntas = [...preguntas];
-        nuevasPreguntas[index] = {
-            ...nuevasPreguntas [index],
-            [campo]: valor,
-            // Resetear opciones si el tipo cambia a texto
-            ...(campo === 'tipo' && valor === 'texto' ? { opciones: [] } : {})
-        };
-        setPreguntas(nuevasPreguntas);
-    };
-
-    // Agregar una opción a una preguntar de tipo checkbox o radio
-    const agregarOpcion = (preguntaIndex: number) => {
-        if (nuevaOpción.trim()) {
-            const nuevasPreguntas = [...preguntas];
-            nuevasPreguntas[preguntaIndex].opciones.push(nuevaOpción.trim());
-            setPreguntas(nuevasPreguntas);
-            setNuevaOpcion('');
-        }
-    };
-
-    // Eliminar una opción de una pregunta
-    const eliminarOpcion = (preguntaIndex: number, opcionIndex: number) => {
-        if (nuevaOpcion.trim()) {
-            const nuevasPreguntas = [...preguntas];
-            nuevasPreguntas[preguntaIndex].opciones.splice(opcionIndex, 1);
-            setPreguntas(nuevasPreguntas);
-        }
-    };
-
-    return {
+export default function NewForm() {
+    const { token } = useAuth();
+    const navigate = useNavigate();
+    const {
         preguntas,
         agregarPregunta,
         eliminarPregunta,
         actualizarPregunta,
         agregarOpcion,
         eliminarOpcion
-    };
-};
-
-export default function NewForm() {
-    const { token } = useAuth();
-    const navigate = useNavigate();
-    const [preguntas, setPreguntas] = useState<Pregunta[]>([]);
-    const [nuevaOpcion, setNuevaOpcion] = useState('');
-
-    // Agregar una nueva pregunta al formulario
-    const agregarPregunta = () => {
-        setPreguntas([...preguntas, { id: crypto.randomUUID(), texto: '', tipo: 'texto', opciones: [], required: false }]);
-    };
+    } = usePreguntasForm();
 
     return (
         <div className="min-h-screen bg-fondo font-serif text-texto p-6">
-            <div className="*:max-w-3xl mx-auto bg-blanco p-6 border-borde rounded-lg shadow-sm">
-                <h2 className="text-2xl mb-4 text-acento text-center">Nuevo formulario</h2>
-                <Formik
-                    initialValues={{ nombre: '', email: '', mensaje: '' }}
+            <div className="max-w-3xl mx-auto bg-blanco p-6 border border-borde rounded-lg shadow-sm">
+                <h2 className="text-2xl mb-4 text-acento text-center">
+                    Nuevo formulario
+                </h2>
+                <Formik<FormularioValues>
+                    initialValues={{
+                        nombre: '',
+                        email: '',
+                        mensaje: '',
+                        preguntas: []
+                    }}
                     validationSchema={schema}
                     onSubmit={async (values, { setSubmitting }) => {
                         try {
-                            // Enviar formulario con preguntas al backend
-                            const response = await fetch('/api/formularios', {
-                                method: 'POST',
-                                headers: {
-                                    'Content-Type': 'application/json',
-                                    Authorization: `Bearer ${token}`,
-                                },
-                                body: JSON.stringify({ ...values, preguntas }),
-                            });
-                            if (!response.ok) throw new Error('Error al crear formulario');
-                            navigate('/formularios');
+                            const response = await fetch(
+                                `${import.meta.env.VITE_API_URL}/forms/crear`,
+                                {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                        Authorization: `Bearer ${token}`
+                                    },
+                                    body: JSON.stringify({
+                                        ...values,
+                                        preguntas
+                                    })
+                                }
+                            );
+                            if (!response.ok) {
+                                throw new Error('Error al crear formulario');
+                            }
+                            navigate('/dashboard');
                         } catch (error) {
                             console.error(error);
                         } finally {
                             setSubmitting(false);
                         }
                     }}
-                ></Formik>
+                >
+                    {({ isSubmitting }) => (
+                        <Form className="space-y-6">
+                            <div className="space-y-4">
+                                <div>
+                                    <label className="block text-sm mb-1">Nombre del Formulario</label>
+                                    <Field name="nombre" className="w-full p-2 border border-borde rounded bg-fondo" />
+                                    <ErrorMessage name="nombre" component="div" className="text-red-600 text-sm mt-1" />
+                                </div>
+                                <div>
+                                    <label className="block text-sm mb-1">Email</label>
+                                    <Field name="email" type="email" className="w-full p-2 border border-borde rounded bg-fondo" />
+                                    <ErrorMessage name="email" component="div" className="text-red-600 text-sm mt-1" />
+                                </div>
+                                <div>
+                                    <label className="block text-sm mb-1">Descripción</label>
+                                    <Field as="textarea" name="mensaje" className="w-full p-2 border border-borde rounded bg-fondo" />
+                                </div>
+                            </div>
+
+                            <div className="border-t pt-6">
+                                <h3 className="text-lg mb-4">Preguntas</h3>
+                                {preguntas.map((pregunta) => (
+                                    <PreguntaForm
+                                        key={pregunta.id}
+                                        pregunta={pregunta}
+                                        onUpdate={(campo, valor) => actualizarPregunta(pregunta.id, campo, valor)}
+                                        onDelete={() => eliminarPregunta(pregunta.id)}
+                                        onAddOption={(opcion) => agregarOpcion(pregunta.id, opcion)}
+                                        onDeleteOption={(index) => eliminarOpcion(pregunta.id, index)}
+                                    />
+                                ))}
+                                
+                                <button
+                                    type="button"
+                                    onClick={agregarPregunta}
+                                    className="w-full p-2 mt-4 border-2 border-acento text-acento rounded hover:bg-acento hover:text-white transition"
+                                >
+                                    Agregar Pregunta
+                                </button>
+                            </div>
+
+                            <button
+                                type="submit"
+                                disabled={isSubmitting}
+                                className="w-full p-2 bg-acento text-blanco rounded hover:opacity-90 transition"
+                            >
+                                {isSubmitting ? 'Guardando...' : 'Guardar Formulario'}
+                            </button>
+                        </Form>
+                    )}
+                </Formik>
             </div>
         </div>
-    )
+    );
 }
