@@ -4,42 +4,44 @@ from flask import Flask, redirect
 from flask_cors import CORS
 from flask_jwt_extended import JWTManager
 from flask_migrate import Migrate
-from database import db
-from routes import auth_bp, formulario_bp
+from database import db, init_app
+import logging
 from dotenv import load_dotenv
 import os
 
+# Configurar logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+# Cargar variables de entorno una sola vez 
 load_dotenv()
 
-app = Flask(__name__)
-CORS(app)
+def create_app():
+    app = Flask(__name__)
+    CORS(app)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv(
-    'DATABASE_URL',
-    'sqlite:///formularios.db'
-)
+    # Configuración desde variables de entorno
+    app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')    
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET', 'dev-secret-key')
 
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    # Inicializar extenciones
+    db.init_app(app)
+    jwt = JWTManager(app)
+    migrate = Migrate(app, db)
 
-# --------- JWTManager ---------
+    # Registrar blueprints
+    from routes import auth_bp, formulario_bp
+    app.register_blueprint(auth_bp)
+    app.register_blueprint(formulario_bp, url_prefix='/api/forms')
 
-app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET', 'cambiaesta_clave')
-jwt = JWTManager(app)
+    return app
 
-app.register_blueprint(auth_bp)
-app.register_blueprint(formulario_bp, url_prefix='/api/forms')
-
-db.init_app(app)
-
-# --------- Migrate ---------
-
-Migrate = Migrate(app, db)
-
-# 👇 Mover esta función arriba
-def crear_tablas():
-    with app.app_context():
-        db.create_all()
+app = create_app()
 
 @app.route('/')
 def index():
-    return redirect('http://localhost:5173') 
+    return redirect('http://localhost:5173')
+
+if __name__ == '__main__':
+    app.run(debug=True)
