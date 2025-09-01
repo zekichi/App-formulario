@@ -1,10 +1,13 @@
 # backend/routes.py
-
-from flask import Blueprint, json, request, jsonify
+import logging
+from flask import Blueprint, jsonify, request
 from database import db
 from models import Formulario, User, Pregunta
 from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
 from marshmallow import Schema, fields, validate, ValidationError
+import json
+
+logger = logging.getLogger(__name__)
 
 # --------- auth_bp ---------
 
@@ -100,27 +103,38 @@ def crear_formulario():
     try:
         schema = FormularioSchema()
         data = schema.load(request.json)
-
+        
         user_id = get_jwt_identity()
-        nuevo_formulario = Formulario(
-            nombre=data['nombre'],
-            email=data['email'],
-            mensaje=data.get('mensaje'),
-            user_id=user_id
-        )
-        db.session.add(nuevo_formulario)
-        db.session.flush() # Para obtener el ID antes del commit
-
-        for p in data.get('preguntas', []):
-            pregunta = Pregunta(
-                texto=p['texto'],
-                tipo=p['tipo'],
-                opciones=json.dumps(p.get('opciones', [])),
-                formulario_id=nuevo_formulario.id
+        
+        # Usar context manager para la transacción
+        try:
+            nuevo_formulario = Formulario(
+                nombre=data['nombre'],
+                email=data['email'],
+                mensaje=data.get('mensaje'),
+                user_id=user_id
             )
-            db.session.add(pregunta)
+            db.session.add(nuevo_formulario)
+            db.session.flush()
 
-        db.session.commit()
-        return jsonify({"message": "Formulario creado con preguntas"}), 201
+            for p in data.get('preguntas', []):
+                pregunta = Pregunta(
+                    texto=p['texto'],
+                    tipo=p['tipo'],
+                    opciones=json.dumps(p.get('opciones', [])),
+                    formulario_id=nuevo_formulario.id
+                )
+                db.session.add(pregunta)
+            
+            db.session.commit()
+            logger.info(f"Formulario creado: ID {nuevo_formulario.id}")
+            return jsonify({"message": "Formulario creado con éxito"}), 201
+            
+        except Exception as e:
+            db.session.rollback()
+            logger.error(f"Error al crear formulario: {str(e)}")
+            return jsonify({"error": "Error al crear formulario"}), 500
+            
     except ValidationError as err:
+        logger.warning(f"Error de validación: {err.messages}")
         return jsonify({"error": err.messages}), 400

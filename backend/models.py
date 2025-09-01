@@ -3,6 +3,9 @@
 from database import db
 from datetime import datetime
 from flask_bcrypt import Bcrypt
+from sqlalchemy.ext.hybrid import hybrid_property
+from sqlalchemy.orm import validates
+import json
 
 bcrypt = Bcrypt()
 
@@ -57,6 +60,18 @@ class Pregunta(db.Model):
     formulario_id = db.Column(db.Integer, db.ForeignKey('formularios.id'), nullable=False)
 
     formulario = db.relationship('Formulario', back_populates='preguntas')
+
+    @validates('tipo')
+    def validar_tipo(self, key, tipo):
+        tipos_validos = ['texto', 'checkbox', 'radio']
+        if tipo not in tipos_validos:
+            raise ValueError(f"Tipo inválido. Debe ser uno de: {tipos_validos}")
+        return tipo
+    
+    @hybrid_property
+    def opciones_lista(self):
+        """Retorna las opciones como lista Python"""
+        return json.loads(self.opciones) if self.opciones else []
 
 class Respuesta(db.Model):
     id = db.Column(db.Integer, primary_key=True)
