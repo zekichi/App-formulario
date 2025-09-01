@@ -57,3 +57,9 @@ class Pregunta(db.Model):
     formulario_id = db.Column(db.Integer, db.ForeignKey('formularios.id'), nullable=False)
 
     formulario = db.relationship('Formulario', back_populates='preguntas')
+
+class Respuesta(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    pregunta_id = db.Column(db.Integer, db.ForeignKey('preguntas.id'))
+    respuesta = db.Column(db.Text)
+    fecha = db.Column(db.DateTime, default=datetime.utcnow)

@@ -133,3 +133,21 @@ VITE_API_URL=http://localhost:5000/api
 - `docs/esquema_base_datos.md`: Esquema de la base de datos.
 - `docs/scrum-plan.md`: Planificación ágil y sprints.
 - `docs/listado-formularios.md`: Flujo de datos y ejemplo de respuesta.
+
+## 9. Formularios Personalizados
+
+### Tipos de Preguntas Soportadas
+- Texto libre
+- Checkbox (selección múltiple)
+- Radio (opción única)
+
+### Estructura de Datos
+```typescript
+interface Pregunta {
+    id: string;          // ID único para cada pregunta
+    texto: string;       // Texto de la pregunta
+    tipo: 'texto' | 'checkbox' | 'radio';  // Tipo de respuesta
+    opciones: string[];  // Opciones para checkbox/radio
+    required: boolean;   // Si es obligatoria
+}
+```
