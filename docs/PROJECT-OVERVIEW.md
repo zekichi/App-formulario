@@ -270,21 +270,102 @@ interface Pregunta {
 }
 ```
 
-/
-├─ backend/
-│  ├─ app.py
-│  ├─ config.py
-│  ├─ database.py
-│  ├─ models.py
-│  ├─ routes.py
-│  └─ migrations/
-├─ frontend/
-│  ├─ src/
-│  │  ├─ components/
-│  │  │  └─ formularios/
-│  │  ├─ context/
-│  │  ├─ hooks/
-│  │  └─ types/
-│  └─ ...config files
-└─ docs/
-   └─ PROJECT-OVERVIEW.md
+## 16. Estado Actual de Implementación
+
+### Frontend
+- [x] Sistema completo de autenticación (registro/login)
+- [x] Creación de formularios dinámicos
+- [x] Validación con Formik + Yup
+- [x] Gestión de estado con hooks personalizados
+- [x] Manejo de rutas protegidas
+- [x] Dashboard para visualizar formularios
+- [x] Diseño responsive con Tailwind CSS
+- [x] Interfaz retro con paleta personalizada
+
+### Backend
+- [x] API RESTful con Flask
+- [x] Autenticación JWT
+- [x] Modelos de datos relacionales
+- [x] Validación de datos con Marshmallow
+- [x] Conexión PostgreSQL
+- [x] Migraciones con Alembic
+- [x] Manejo de errores centralizado
+- [x] CORS configurado
+
+### Base de Datos
+- [x] Modelo User con relaciones
+- [x] Modelo Formulario con preguntas
+- [x] Modelo Pregunta con tipos dinámicos
+- [x] Migraciones automáticas
+
+## 17. Configuración del Entorno
+
+### Variables de Entorno
+```env
+# [.env](http://_vscodecontentref_/1)
+FLASK_ENV=development
+DATABASE_URL=postgresql://postgres:270998@localhost:5432/formularios_db
+JWT_SECRET=li27
+CORS_ORIGIN=http://localhost:5173
+
+# [.env.local](http://_vscodecontentref_/2)
+VITE_API_URL=http://localhost:5000/api
+```
+
+## 18 Flujo de Autenticación
+
+### Registro
+1. Usuario ingresa email y contraseña
+2. Frontend valida datos con Yup
+3. Backend verifica disponibilidad de email
+4. Se crea usuario con contraseña hasheada
+5. Redirección a login
+
+### Login
+1. Usuario ingresa credenciales
+2. Completa datos básicos
+3. Agrega preguntas dinámicamente:
+    - Texto libre
+    - Checkbox (múltiple)
+    - Radio (única)
+4. Validación frontend y backend
+5. Almacenamiento en PostgreSQL
+
+## 19 Gestión de Formularios
+
+### Creación
+1. Usuario accede a /forms/new
+2. Completa datos básicos
+3. Agrega preguntas dinámicamente:
+    - Texto libre
+    - Checkbox (múltiple)
+    - Radio (única)
+4. Validación frontend y backend
+5. Almacenamineto en PostrgeSQL
+
+### Visualización
+1. Dashboard muestra listado
+2. Opciones de gestión
+    - Ver detalles
+    - Elimnar
+    - (Próximo) Exportar
+
+## 20. Próximas Mejoras
+
+### Corto Plazo
+- [] Vista previa de formularios
+- [] Duplicación de formularios
+- [] Edición de formularios existentes
+- [] Paginación en dashboard
+
+### Medio Plazo
+- [] Análisis de respuestas
+- [] Gráficos estadísticos
+- [] Exportación PDF/CSV
+- [] Plantillas predefinidas
+
+### Largo Plazo
+- [] Colaboración entre usuarios
+- [] Roles y permisos
+- [] Noticiaciones por email
+- [] API pública documentada
