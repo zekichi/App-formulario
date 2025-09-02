@@ -22,7 +22,7 @@ def create_app():
     app = Flask(__name__)
     CORS(app, resources={
         r"/api/*": {
-            "origins": os.getenv('CORS_ORIGIN', 'http://localhost:5173'),
+            "origins": ["http://localhost:5173"],
             "methods": ["GET", "POST", "PUT", "DELETE"],
             "allow_headers": ["Content-Type", "Authorization"],
             "supports_credentials": True
@@ -67,6 +67,14 @@ def test_db():
             'message': 'Database connection failed',
             'error': str(e)
         }), 500
+
+@app.errorhandler(404)
+def not_found(e):
+    return jsonify({"error": "Ruta no encontrada"}), 404
+
+@app.errorhandler(500)
+def server_error(e):
+    return jsonify({"error": "Error interno del servidor"}), 500
 
 if __name__ == '__main__':
     app.run(debug=True)

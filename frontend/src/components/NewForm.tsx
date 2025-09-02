@@ -69,6 +69,7 @@ export default function NewForm() {
                     validate={validateForm}
                     onSubmit={async (values, { setSubmitting, setFieldError }) => {
                         try {
+                            console.log('Enviando formulario:', { ...values, preguntas });
                             const response = await fetch(
                                 `${import.meta.env.VITE_API_URL}/forms/crear`,
                                 {
@@ -85,6 +86,7 @@ export default function NewForm() {
                             );
 
                             const data = await response.json();
+                            console.log('Respuesta:', data);
 
                             if (!response.ok) {
                                 throw new Error(data.error || 'Error al crear formulario');

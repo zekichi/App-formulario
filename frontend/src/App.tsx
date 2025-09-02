@@ -10,32 +10,38 @@ import Dashboard from './components/Dashboard';
 import NewForm from './components/NewForm';
 
 export default function App() {
-  return (
-    <AuthProvider>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route
-            path="/dashboard"
-            element={
-              <PrivateRoute>
-                <Dashboard />
-              </PrivateRoute>
-            }
-          />
-          <Route
-            path="/forms/new"
-            element={
-              <PrivateRoute>
-                <NewForm />
-              </PrivateRoute>
-            }
-          />
-          <Route path="/" element={<Navigate to="/dashboard" replace />} />
-        </Routes>
-      </BrowserRouter>
-    </AuthProvider>
-  );
+    return (
+        <BrowserRouter>
+            <AuthProvider>
+                <Routes>
+                    {/* Rutas públicas */}
+                    <Route path="/" element={<Home />} />
+                    <Route path="/login" element={<Login />} />
+                    <Route path="/register" element={<Register />} />
+                    
+                    {/* Rutas protegidas */}
+                    <Route
+                        path="/dashboard"
+                        element={
+                            <PrivateRoute>
+                                <Dashboard />
+                            </PrivateRoute>
+                        }
+                    />
+                    <Route
+                        path="/forms/new"
+                        element={
+                            <PrivateRoute>
+                                <NewForm />
+                            </PrivateRoute>
+                        }
+                    />
+                    
+                    {/* Ruta por defecto */}
+                    <Route path="*" element={<Navigate to="/" />} />
+                </Routes>
+            </AuthProvider>
+        </BrowserRouter>
+    );
 }
 

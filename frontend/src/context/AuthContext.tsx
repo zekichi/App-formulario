@@ -12,9 +12,8 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType>({} as AuthContextType);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-    const [token, setToken] = useState<string | null>(
-        localStorage.getItem('token')
-    );
+    const [token, setToken] = useState<string | null>(null);  // Inicializar como null
+    const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
 
     const api = axios.create({
@@ -64,6 +63,24 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         setToken(null);
         navigate('/login');
     };
+
+    useEffect(() => {
+        // Verificar token al inicio
+        const storedToken = localStorage.getItem('token');
+        if (storedToken) {
+            setToken(storedToken);
+        }
+        setLoading(false);
+    }, []);
+
+    // Si está cargando, mostrar un indicador visual más claro
+    if (loading) {
+        return (
+            <div className="min-h-screen bg-fondo flex items-center justify-center">
+                <div className="text-acento text-xl">Cargando...</div>
+            </div>
+        );
+    }
 
     return (
         <AuthContext.Provider value={{ token, register, login, logout }}>
