@@ -2,6 +2,7 @@
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { useAuth } from '../context/AuthContext';
+import { useNavigate } from 'react-router-dom';
 
 const schema = Yup.object().shape({
   email: Yup.string().email('Email inválido').required('Requerido'),
@@ -13,6 +14,7 @@ const schema = Yup.object().shape({
 
 export default function Register() {
   const { register } = useAuth();
+  const navigate = useNavigate(); // Agregar este hook
 
   return (
     <div className="min-h-screen bg-fondo font-serif text-texto flex items-center justify-center p-6">
@@ -24,6 +26,7 @@ export default function Register() {
           onSubmit={async (values, { setSubmitting, setFieldError }) => {
             try {
               await register(values.email, values.password);
+              navigate('/login'); // Agregar esta línea
             } catch (err: any) {
               setFieldError('email', 'Ya existe ese email');
             } finally {

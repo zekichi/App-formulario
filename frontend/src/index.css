@@ -2,6 +2,16 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Custom styles below */
+@layer base {
+  html {
+    @apply font-serif;
+  }
+  body {
+    @apply bg-fondo text-texto;
+  }
+}
+
 @layer base {
   :root {
     --color-fondo: #f7f3ed;

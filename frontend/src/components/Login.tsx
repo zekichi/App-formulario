@@ -2,6 +2,8 @@
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { useAuth } from '../context/AuthContext.tsx'
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const schema = Yup.object().shape({
     email: Yup.string().email('Email inválido').required('Requerido'),
@@ -9,7 +11,25 @@ const schema = Yup.object().shape({
 });
 
 export default function Login() {
+    const [error, setError] = useState('');
     const { login } = useAuth();
+    const navigate = useNavigate();
+
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        setError('');
+        
+        const formData = new FormData(e.currentTarget);
+        const email = formData.get('email') as string;
+        const password = formData.get('password') as string;
+
+        try {
+            await login(email, password);
+            // La redirección la maneja AuthContext
+        } catch (err) {
+            setError('Error al iniciar sesión');
+        }
+    };
 
     return (
         <div className="min-h-screen bg-fondo font-serif text-texto flex items-center justify-center p-6">
@@ -29,7 +49,7 @@ export default function Login() {
                     }}
                 >
                     {({ isSubmitting }) => (
-                        <Form className="space-y-4">
+                        <Form className="space-y-4" onSubmit={handleSubmit}>
                             <div>
                                 <label className="block text-sm mb-1">Email</label>
                                 <Field
@@ -48,6 +68,7 @@ export default function Login() {
                                 />
                                     <ErrorMessage name="password" component="div" className="text-red-600 text-sm mt-1" />
                             </div>
+                            {error && <div className="text-red-600 text-sm mt-1">{error}</div>}
                             <button
                                 type="submit"
                                 disabled={isSubmitting}

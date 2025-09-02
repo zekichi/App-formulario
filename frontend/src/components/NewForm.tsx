@@ -3,10 +3,10 @@ import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+// import { useState } from 'react';
 import { usePreguntasForm } from '../hooks/usePreguntasForm';
 import { PreguntaForm } from './formularios/PreguntaForm';
-import type { FormularioValues, Pregunta } from '../types/formulario';
+import type { FormularioValues} from '../types/formulario';
 
 // Esquema de validación para el formulario principal
 const schema = Yup.object().shape({
@@ -44,6 +44,14 @@ export default function NewForm() {
         eliminarOpcion
     } = usePreguntasForm();
 
+    // Agregar esta validación antes del submit
+    const validateForm = (values: FormularioValues) => {
+        if (preguntas.length === 0) {
+            return { preguntas: 'Debe agregar al menos una pregunta' };
+        }
+        return {};
+    };
+
     return (
         <div className="min-h-screen bg-fondo font-serif text-texto p-6">
             <div className="max-w-3xl mx-auto bg-blanco p-6 border border-borde rounded-lg shadow-sm">
@@ -58,7 +66,8 @@ export default function NewForm() {
                         preguntas: []
                     }}
                     validationSchema={schema}
-                    onSubmit={async (values, { setSubmitting }) => {
+                    validate={validateForm}
+                    onSubmit={async (values, { setSubmitting, setFieldError }) => {
                         try {
                             const response = await fetch(
                                 `${import.meta.env.VITE_API_URL}/forms/crear`,
@@ -74,12 +83,17 @@ export default function NewForm() {
                                     })
                                 }
                             );
+
+                            const data = await response.json();
+
                             if (!response.ok) {
-                                throw new Error('Error al crear formulario');
+                                throw new Error(data.error || 'Error al crear formulario');
                             }
+
                             navigate('/dashboard');
-                        } catch (error) {
-                            console.error(error);
+                        } catch (error: any) {
+                            console.error('Error:', error);
+                            setFieldError('nombre', error.message);
                         } finally {
                             setSubmitting(false);
                         }
