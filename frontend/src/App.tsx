@@ -7,7 +7,7 @@ import Home from './components/Home';
 import Login from './components/Login';
 import Register from './components/Register';
 import Dashboard from './components/Dashboard';
-// más páginas después…
+import NewForm from './components/NewForm';
 
 export default function App() {
   return (
@@ -22,6 +22,14 @@ export default function App() {
             element={
               <PrivateRoute>
                 <Dashboard />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/forms/new"
+            element={
+              <PrivateRoute>
+                <NewForm />
               </PrivateRoute>
             }
           />
