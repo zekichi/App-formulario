@@ -2,19 +2,19 @@
 export default {
   content: [
     "./index.html",
-    "./src/**/*.{js,jsx,ts,tsx}"
+    "./src/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
     extend: {
-      fontFamily: {
-        serif: ['"Libre Baskerville"', 'serif'],
-      },
       colors: {
-        fondo: '#fdf6e3',
-        borde: '#e0b589',
-        acento: '#d97d0d',
-        texto: '#5c3d2e',
-        blanco: '#fffaf3',
+        fondo: 'var(--color-fondo)',
+        texto: 'var(--color-texto)',
+        acento: 'var(--color-acento)',
+        borde: 'var(--color-borde)',
+        blanco: 'var(--color-blanco)',
+      },
+      fontFamily: {
+        serif: ['Libre Baskerville', 'serif'],
       },
     },
   },
