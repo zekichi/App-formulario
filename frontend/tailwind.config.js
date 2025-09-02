@@ -13,11 +13,7 @@ export default {
         borde: 'var(--color-borde)',
         blanco: 'var(--color-blanco)',
       },
-      fontFamily: {
-        serif: ['Libre Baskerville', 'serif'],
-      },
     },
   },
   plugins: [],
 }
-

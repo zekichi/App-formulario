@@ -1,6 +1,6 @@
 // frontend/src/hooks/usePreguntasForm.ts
 import { useState } from 'react';
-import { Pregunta, PreguntaTipo } from '../types/formulario';
+import type { Pregunta, PreguntaTipo } from '../types/formulario';
 
 export const usePreguntasForm = () => {
     const [preguntas, setPreguntas] = useState<Pregunta[]>([]);
@@ -16,20 +16,26 @@ export const usePreguntasForm = () => {
         setPreguntas(prev => [...prev, nuevaPregunta]);
     };
 
-    const eliminarPregunta = (id:string) => {
-        setPreguntas (prev => prev.filter(p => p.id !== id));
+    const eliminarPregunta = (id: string) => {
+        setPreguntas(prev => prev.filter(p => p.id !== id));
     };
 
-    const actualizarPregunta = (id: string, campo: keyof Pregunta, valor: string | boolean | string[] | PreguntaTipo) => {
+    const actualizarPregunta = (
+        id: string, 
+        campo: keyof Pregunta, 
+        valor: string | boolean | string[] | PreguntaTipo
+    ) => {
         setPreguntas(prev => prev.map(p => 
             p.id === id ? { ...p, [campo]: valor } : p
         ));
     };
 
     const agregarOpcion = (preguntaId: string, opcion: string) => {
+        if (!opcion.trim()) return; // Validación añadida
+        
         setPreguntas(prev => prev.map(p => 
             p.id === preguntaId 
-                ? { ...p, opciones: [...p.opciones, opcion] }
+                ? { ...p, opciones: [...p.opciones, opcion.trim()] }
                 : p
         ));
     };
