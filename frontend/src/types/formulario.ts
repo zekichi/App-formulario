@@ -16,9 +16,12 @@ export interface FormularioValues {
     preguntas: Pregunta[];
 }
 
-export interface RepuestaFormulario {
-    id: number;
-    preguntaId: number;
-    respuesta: string;
-    fecha: string;
+export interface FormularioResponse {
+    id: string;
+    nombre: string;
+    email: string;
+    mensaje: string;
+    preguntas: Pregunta[];
+    createdAt: string;
+    userId: string;
 }

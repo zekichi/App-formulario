@@ -1,13 +1,14 @@
-# Entorno virtual
-venv/
+# Node
+node_modules/
+dist/
+.env.local
 
-# Archivos de Python compilados
+# Python
 __pycache__/
 *.pyc
-
-# Configuraciones locales
 .env
-*.log
+instance/
 
-# IDE / editor
+# IDE
 .vscode/
+.idea/

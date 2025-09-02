@@ -151,3 +151,140 @@ interface Pregunta {
     required: boolean;   // Si es obligatoria
 }
 ```
+
+## 10. Componentes Principales
+
+### NewForm.tsx
+El componente principal para crear formularios dinámicos. Características:
+- Usa Formik y Yup para validación
+- Manejo de preguntas dinámicas
+- Soporte para diferentes tipos de campos
+- Envío de datos con autenticación JWT
+- Integración con contexto de autenticación
+- Navegación post-envío
+
+### Estructura del Formulario
+```typescript
+interface FormularioValues {
+    nombre: string;
+    email: string;
+    mensaje: string;
+    preguntas: Pregunta[];
+}
+
+interface Pregunta {
+    id: string;
+    texto: string;
+    tipo: 'texto' | 'checkbox' | 'radio';
+    opciones: string[];
+    required: boolean;
+}
+```
+
+## 11. Guía de Estilos
+
+### Paleta de Colores
+- Fondo: bg-fondo
+- Texto: text-texto
+- Acento: text-acento
+- Bordes: border-borde
+- Blanco: bg-blanco
+
+### Tipografía
+- Font-family: font-serif
+- Títulos: text-2xl
+- Subtítulos: text-lg
+- Texto normal: text-sm
+
+### Componentes UI
+- Botones primarios: `bg-acento text-blanco rounded hover:opacity-90`
+- Botones secundarios: `border-2 border-acento text-acento hover:bg-acento hover:text-white`
+- Inputs: `p-2 border border-borde rounded bg-fondo`
+- Contenedores: `bg-blanco p-6 border border-borde rounded-lg shadow-sm`
+
+## 12. Flujo de Trabajo
+
+1. **Creación de Formulario**
+   - Usuario accede a /new-form
+   - Completa datos básicos
+   - Agrega preguntas dinámicamente
+   - Configura tipos y opciones
+   - Envía con validación
+
+2. **Proceso de Guardado**
+   - Validación frontend con Yup
+   - Envío con JWT en headers
+   - Almacenamiento en PostgreSQL
+   - Redirección a dashboard
+
+3. **Gestión de Preguntas**
+   - Agregar/eliminar preguntas
+   - Configurar tipo de respuesta
+   - Gestionar opciones para checkbox/radio
+   - Validación específica por tipo
+
+## 13. Seguridad
+
+- Validación en ambos extremos
+- Protección de rutas con JWT
+- Sanitización de inputs
+- Control de acceso por usuario
+- Encriptación de datos sensibles
+
+## 14. Mejoras Futuras
+
+- [ ] Previsualización de formularios
+- [ ] Duplicación de formularios
+- [ ] Plantillas predefinidas
+- [ ] Exportación de respuestas
+- [ ] Análisis de datos
+- [ ] Reportes automáticos
+
+## 15. Sistema de Formularios Dinámicos
+
+### Componentes Principales
+- **NewForm**: Componente principal para creación
+- **PreguntaForm**: Componente para cada pregunta individual
+- **usePreguntasForm**: Hook personalizado para gestión de estado
+
+### Arquitectura de Datos
+```typescript
+// Tipos de preguntas disponibles
+type PreguntaTipo = 'texto' | 'checkbox' | 'radio';
+
+// Estructura completa del formulario
+interface FormularioValues {
+    nombre: string;
+    email: string;
+    mensaje: string;
+    preguntas: Pregunta[];
+}
+
+// Estructura de cada pregunta
+interface Pregunta {
+    id: string;
+    texto: string;
+    tipo: PreguntaTipo;
+    opciones: string[];
+    required: boolean;
+}
+```
+
+/
+├─ backend/
+│  ├─ app.py
+│  ├─ config.py
+│  ├─ database.py
+│  ├─ models.py
+│  ├─ routes.py
+│  └─ migrations/
+├─ frontend/
+│  ├─ src/
+│  │  ├─ components/
+│  │  │  └─ formularios/
+│  │  ├─ context/
+│  │  ├─ hooks/
+│  │  └─ types/
+│  └─ ...config files
+└─ docs/
+   └─ PROJECT-OVERVIEW.md
