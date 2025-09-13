@@ -3,7 +3,7 @@ import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { useAuth } from '../context/AuthContext.tsx'
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom'; // Agregar Link
 
 const schema = Yup.object().shape({
     email: Yup.string().email('Email inválido').required('Requerido'),
@@ -34,7 +34,7 @@ export default function Login() {
     return (
         <div className="min-h-screen bg-fondo font-serif text-texto flex items-center justify-center p-6">
             <div className="w-full max-w-sm bg-blanco p-6 border border-borde rounded-lg shadow-sm">
-                <h2 className="text-2xl mb-4 text-acento  text-center">Iniciar sesión</h2>
+                <h2 className="text-2xl mb-4 text-acento text-center">Iniciar sesión</h2>
                 <Formik
                     initialValues={{ email: '', password: '' }}
                     validationSchema={schema}
@@ -79,6 +79,19 @@ export default function Login() {
                         </Form>
                     )}
                 </Formik>
+                
+                {/* Nuevo enlace para crear cuenta */}
+                <div className="mt-4 text-center">
+                    <p className="text-sm text-texto opacity-70">
+                        ¿No tienes cuenta?{' '}
+                        <Link 
+                            to="/register" 
+                            className="text-acento hover:opacity-80 font-medium underline"
+                        >
+                            Crear cuenta
+                        </Link>
+                    </p>
+                </div>
             </div>
         </div>
     );

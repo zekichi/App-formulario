@@ -368,4 +368,4 @@ VITE_API_URL=http://localhost:5000/api
 - [] Colaboración entre usuarios
 - [] Roles y permisos
 - [] Noticiaciones por email
-- [] API pública documentada
+- [] API pública documenta da

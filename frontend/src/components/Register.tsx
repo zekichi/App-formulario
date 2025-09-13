@@ -2,7 +2,7 @@
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { useAuth } from '../context/AuthContext';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom'; // Agregar Link
 
 const schema = Yup.object().shape({
   email: Yup.string().email('Email inválido').required('Requerido'),
@@ -73,6 +73,19 @@ export default function Register() {
             </Form>
           )}
         </Formik>
+        
+        {/* Nuevo enlace para iniciar sesión */}
+        <div className="mt-4 text-center">
+          <p className="text-sm text-texto opacity-70">
+            ¿Ya tienes cuenta?{' '}
+            <Link 
+              to="/login" 
+              className="text-acento hover:opacity-80 font-medium underline"
+            >
+              Iniciar sesión
+            </Link>
+          </p>
+        </div>
       </div>
     </div>
   );
