@@ -8,6 +8,8 @@ import Login from './components/Login';
 import Register from './components/Register';
 import Dashboard from './components/Dashboard';
 import NewForm from './components/NewForm';
+import FormView from './components/FormView';
+import PublicForm from './components/PublicForm';
 
 export default function App() {
     return (
@@ -18,6 +20,7 @@ export default function App() {
                     <Route path="/" element={<Home />} />
                     <Route path="/login" element={<Login />} />
                     <Route path="/register" element={<Register />} />
+                    <Route path="/form/:formId" element={<PublicForm />} />
                     
                     {/* Rutas protegidas */}
                     <Route
@@ -33,6 +36,14 @@ export default function App() {
                         element={
                             <PrivateRoute>
                                 <NewForm />
+                            </PrivateRoute>
+                        }
+                    />
+                    <Route
+                        path="/form/:formId/view"
+                        element={
+                            <PrivateRoute>
+                                <FormView />
                             </PrivateRoute>
                         }
                     />

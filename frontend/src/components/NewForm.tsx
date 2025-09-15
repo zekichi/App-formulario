@@ -3,7 +3,6 @@ import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
-// import { useState } from 'react';
 import { usePreguntasForm } from '../hooks/usePreguntasForm';
 import { PreguntaForm } from './formularios/PreguntaForm';
 import type { FormularioValues} from '../types/formulario';
@@ -92,7 +91,13 @@ export default function NewForm() {
                                 throw new Error(data.error || 'Error al crear formulario');
                             }
 
-                            navigate('/dashboard');
+                            // CAMBIO: Navegar al formulario creado en lugar del dashboard
+                            if (data.formulario_id) {
+                                navigate(`/form/${data.formulario_id}/view`);
+                            } else {
+                                // Fallback al dashboard si no hay ID
+                                navigate('/dashboard');
+                            }
                         } catch (error: any) {
                             console.error('Error:', error);
                             setFieldError('nombre', error.message);
@@ -156,3 +161,4 @@ export default function NewForm() {
         </div>
     );
 }
+

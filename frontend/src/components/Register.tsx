@@ -86,6 +86,16 @@ export default function Register() {
             </Link>
           </p>
         </div>
+        
+        {/* Agregar enlace para ver formularios */}
+        <div className="mt-2 text-center">
+          <Link 
+            to="/forms" 
+            className="text-sm text-acento hover:opacity-80 underline"
+          >
+            Ver mis formularios
+          </Link>
+        </div>
       </div>
     </div>
   );

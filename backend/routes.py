@@ -106,7 +106,6 @@ def crear_formulario():
         
         user_id = get_jwt_identity()
         
-        # Usar context manager para la transacción
         try:
             nuevo_formulario = Formulario(
                 nombre=data['nombre'],
@@ -128,7 +127,12 @@ def crear_formulario():
             
             db.session.commit()
             logger.info(f"Formulario creado: ID {nuevo_formulario.id}")
-            return jsonify({"message": "Formulario creado con éxito"}), 201
+            
+            # CAMBIO: Devolver el ID del formulario creado
+            return jsonify({
+                "message": "Formulario creado con éxito",
+                "formulario_id": nuevo_formulario.id
+            }), 201
             
         except Exception as e:
             db.session.rollback()
