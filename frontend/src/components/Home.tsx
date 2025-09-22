@@ -70,7 +70,8 @@ export default function Home() {
                     </div>
 
                     <div className="grid md:grid-cols-3 gap-8">
-                        {{
+                        {/* CAMBIO: Arreglar sintaxis - cambiar {{ por {[ */}
+                        {[
                             {
                                 icon: (
                                     <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -98,7 +99,7 @@ export default function Home() {
                                 title: "Seguro y confiable",
                                 description: "Tus datos están protegidos con encriptación avanzada y respaldos automáticos."
                             }
-                        }.map((feature, index) => (
+                        ].map((feature, index) => (
                             <div key={index} className="text-center card card-body hover-lift">
                                 <div className="w-16 h-16 bg-primary-100 rounded-full flex items-center justify-center mx-auto mb-4 text-primary-600">
                                     {feature.icon}

@@ -49,7 +49,13 @@ export default {
           100: '#fee2e2',
           500: '#ef4444',
           600: '#dc2626',
-        }
+        },
+        // Agregar colores de compatibilidad aquí dentro del objeto colors
+        fondo: '#f9fafb',
+        texto: '#111827',
+        acento: '#0284c7',
+        blanco: '#ffffff',
+        borde: '#d1d5db',
       },
       fontFamily: {
         sans: ['Inter', 'ui-sans-serif', 'system-ui'],

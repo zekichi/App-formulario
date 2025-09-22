@@ -8,9 +8,7 @@ import Login from './components/Login';
 import Register from './components/Register';
 import Dashboard from './components/Dashboard';
 import NewForm from './components/NewForm';
-import FormList from './components/FormList';
 import FormView from './components/FormView';
-import FormResponses from './components/FormResponses';
 import PublicForm from './components/PublicForm';
 
 export default function App() {
@@ -35,14 +33,6 @@ export default function App() {
                             }
                         />
                         <Route
-                            path="/forms"
-                            element={
-                                <PrivateRoute>
-                                    <FormList />
-                                </PrivateRoute>
-                            }
-                        />
-                        <Route
                             path="/forms/new"
                             element={
                                 <PrivateRoute>
@@ -55,14 +45,6 @@ export default function App() {
                             element={
                                 <PrivateRoute>
                                     <FormView />
-                                </PrivateRoute>
-                            }
-                        />
-                        <Route
-                            path="/form/:formId/responses"
-                            element={
-                                <PrivateRoute>
-                                    <FormResponses />
                                 </PrivateRoute>
                             }
                         />
