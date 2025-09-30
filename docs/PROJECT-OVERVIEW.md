@@ -2,370 +2,559 @@
 
 ## 1. Descripción General
 
-App-Formularios es una plataforma fullstack para crear formularios personalizados, almacenar respuestas en PostgreSQL y visualizar datos mediante gráficas y reportes PDF. Ofrece una experiencia retro, con tipografías serif y paleta de colores suaves. El proyecto está orientado tanto a fines educativos como administrativos.
+App-Formularios es una plataforma fullstack para crear formularios personalizados, almacenar respuestas en PostgreSQL y visualizar datos mediante gráficas y reportes PDF. Ofrece una experiencia moderna con Tailwind CSS y paleta de colores profesional. El proyecto está orientado tanto a fines educativos como administrativos.
 
 ## 2. Stack Tecnológico
 
 **Frontend:**
-- React 19.x + Vite
-- Tailwind CSS (configuración retro)
+- React 18.x + Vite + TypeScript
+- Tailwind CSS (configuración profesional y moderna)
 - React Router v6
-- Formik + Yup (validación)
-- Axios (comunicaciones HTTP)
+- Formik + Yup (validación de formularios)
+- Context API para manejo de estado global
+- Hooks personalizados para lógica compleja
 
 **Backend:**
 - Python 3.x + Flask 3.x
-- Flask-RESTful / Blueprints
-- SQLAlchemy (ORM)
+- Flask-RESTful con Blueprints
+- SQLAlchemy (ORM) + Flask-Migrate
 - PostgreSQL (host local o ElephantSQL)
 - Flask-CORS / Flask-JWT-Extended (CORS y autenticación)
-- Waitress o Gunicorn (servidor WSGI)
+- Marshmallow (validación y serialización)
+- Bcrypt (encriptación de contraseñas)
 
 **Infraestructura:**
 - GitHub (repositorio y versionado)
-- Vercel / Netlify (frontend)
-- Render / Railway (backend)
-- ElephantSQL / Supabase (base de datos)
+- Vite como bundler y servidor de desarrollo
+- Variables de entorno para configuración
+- Migraciones automáticas con Alembic
 
-## 3. Estructura de Carpetas
+## 3. Estructura de Carpetas Actualizada
 
 ```
 /
 ├─ .env.example
 ├─ README.md
 ├─ requirements.txt
+├─ Procfile
+├─ .gitignore
 ├─ backend/
-│  ├─ .env.backend
+│  ├─ .env
 │  ├─ app.py
+│  ├─ config.py
 │  ├─ database.py
 │  ├─ models.py
 │  ├─ routes.py
-│  └─ run.py
+│  ├─ run.py
+│  ├─ gunicorn.conf.py
+│  ├─ migrations/
+│  │  ├─ versions/
+│  │  ├─ alembic.ini
+│  │  └─ env.py
+│  └─ test/
+│     └─ test_routes.py
 ├─ frontend/
+│  ├─ .env.local
+│  ├─ .env.production
+│  ├─ .gitignore
 │  ├─ index.html
-│  ├─ vite.config.ts
-│  ├─ postcss.config.js
-│  ├─ tailwind.config.js
 │  ├─ package.json
+│  ├─ vite.config.ts
+│  ├─ tailwind.config.js
+│  ├─ postcss.config.js
+│  ├─ tsconfig.json
+│  ├─ tsconfig.app.json
+│  ├─ tsconfig.node.json
 │  └─ src/
 │     ├─ main.tsx
-│     ├─ index.css
 │     ├─ App.tsx
+│     ├─ index.css
+│     ├─ vite-env.d.ts
 │     ├─ components/
-│     │  ├─ Formulario.tsx
 │     │  ├─ Home.tsx
 │     │  ├─ Login.tsx
-│     │  └─ Register.tsx
+│     │  ├─ Register.tsx
+│     │  ├─ Dashboard.tsx
+│     │  ├─ NewForm.tsx
+│     │  ├─ FormView.tsx
+│     │  ├─ PublicForm.tsx
+│     │  ├─ FormList.tsx
+│     │  ├─ FormBuilder.tsx
+│     │  ├─ Navigation.tsx
+│     │  ├─ PrivateRoute.tsx
+│     │  ├─ Footer.tsx
+│     │  ├─ ResponderForm.tsx
+│     │  ├─ ResultadosForm.tsx
+│     │  └─ formularios/
+│     │     └─ PreguntaForm.tsx
 │     ├─ layouts/
 │     │  └─ BaseLayout.tsx
-│     └─ context/
-│        └─ AuthContext.tsx
+│     ├─ context/
+│     │  └─ AuthContext.tsx
+│     ├─ hooks/
+│     │  └─ usePreguntasForm.ts
+│     └─ types/
+│        └─ formulario.ts
 └─ docs/
-   └─ PROJECT_OVERVIEW.md
+   ├─ PROJECT-OVERVIEW.md
+   ├─ seguimientos.md
+   ├─ scrum-plan.md
+   ├─ esquema_base_datos.md
+   ├─ entorno-venv.md
+   ├─ listado-formularios.md
+   └─ postgre-pgadmin.md
 ```
 
-## 4. Variables de Entorno
+## 4. Variables de Entorno Configuradas
 
-**backend/.env.backend**
-```
-DATABASE_URL=postgresql://<user>:<pass>@localhost:5432/formularios_db
-JWT_SECRET=<clave-secreta-para-jwt>
+**backend/.env**
+```env
+DATABASE_URL=postgresql://postgres:270998@localhost:5432/formularios_db
+JWT_SECRET=li27
 FLASK_ENV=development
+CORS_ORIGIN=http://localhost:5173
 ```
 
 **frontend/.env.local**
-```
+```env
 VITE_API_URL=http://localhost:5000/api
 ```
 
-## 5. Infraestructura y Configuración
-
-- Migraciones gestionadas con Flask-Migrate y Alembic.
-- Proxy en Vite para redirigir `/api` al backend.
-- Tailwind CSS configurado con paleta retro y fuente "Libre Baskerville".
-- Documentación en `/docs` sobre el esquema de base de datos, configuración de entorno y metodología Scrum.
-
-## 6. Funcionalidades Clave
-
-- Registro y login de usuarios con JWT.
-- Creación, listado y eliminación de formularios.
-- Relación entre usuarios y formularios.
-- Validación de datos tanto en frontend como en backend.
-- Preparado para agregar preguntas dinámicas y exportar reportes.
-
-## 7. Roadmap y Avances
-
-**Roadmap:**
-1. Ajustar models.py y generar migraciones para incluir user_id en formulario
-2. Crear páginas React y estilizar con paleta retro
-3. Integrar Formik + Yup en Register/Login y creación de formularios
-4. Proteger rutas con JWT (AuthContext + PrivateRoute)
-5. Crear Dashboard.tsx con listado de formularios
-6. Crear NewForm.tsx para generar formularios dinámicos
-7. Añadir lógica de envío al backend con JWT
-8. Mostrar respuestas y permitir eliminar formularios
-9. Crear modelo Pregunta para formularios personalizados
-10. Crear endpoint /forms/crear que recibe preguntas dinámicas
-11. Visualizar respuestas con gráficas (Charts.js / Recharts)
-12. Exportar reportes en PDF (jsPDF /PDFMake)
-
-**Avances Implementados:**
-- Modelo 'User' con contraseña encriptada y relación con 'Formularios'
-- Modelo 'Formulario' vinculado a 'user_id'
-- Blueprint 'auth_bp' con endpoints '/register' y '/login'
-- Blueprint 'formulario_bp' con endpoints '/submit', '/forms', '/eliminar/<id>'
-- JWT configurado con 'JWT_SECRET'
-- Migraciones generadas y aplicadas con Flask-Migrate
-- Endpoint protegido con '@jwt_required()' para envío y eliminación de formularios
-- Páginas creadas: 'Home.tsx', 'Login.tsx', 'Register.tsx', 'Dashboard.tsx', 'NewForm.tsx'
-- Estilizadas con Tailwind y paletas retro
-- Validación con Formik + Yup en login, registro y creación de formularios
-- Contexto de autenticación ('AuthContext.tsx') con login, register, logout
-- Rutas protegidas con 'PrivateRoute.tsx'
-- Navegación con React Router v6
-- Envío de formularios con JWT en header 'Authorization'
-- Listado de formularios en 'Dashboard.tsx' con opción de eliminar
-
-## 8. Documentación y Archivos Relevantes
-
-- `README.md`: Introducción y stack tecnológico.
-- `docs/PROJECT-OVERVIEW.md`: Resumen y roadmap.
-- `docs/esquema_base_datos.md`: Esquema de la base de datos.
-- `docs/scrum-plan.md`: Planificación ágil y sprints.
-- `docs/listado-formularios.md`: Flujo de datos y ejemplo de respuesta.
-
-## 9. Formularios Personalizados
-
-### Tipos de Preguntas Soportadas
-- Texto libre
-- Checkbox (selección múltiple)
-- Radio (opción única)
-
-### Estructura de Datos
-```typescript
-interface Pregunta {
-    id: string;          // ID único para cada pregunta
-    texto: string;       // Texto de la pregunta
-    tipo: 'texto' | 'checkbox' | 'radio';  // Tipo de respuesta
-    opciones: string[];  // Opciones para checkbox/radio
-    required: boolean;   // Si es obligatoria
-}
+**frontend/.env.production**
+```env
+VITE_API_URL=https://tu-api-produccion.com/api
 ```
 
-## 10. Componentes Principales
+## 5. Modelos de Base de Datos Implementados
 
-### NewForm.tsx
-El componente principal para crear formularios dinámicos. Características:
-- Usa Formik y Yup para validación
-- Manejo de preguntas dinámicas
-- Soporte para diferentes tipos de campos
-- Envío de datos con autenticación JWT
-- Integración con contexto de autenticación
-- Navegación post-envío
-
-### Estructura del Formulario
-```typescript
-interface FormularioValues {
-    nombre: string;
-    email: string;
-    mensaje: string;
-    preguntas: Pregunta[];
-}
-
-interface Pregunta {
-    id: string;
-    texto: string;
-    tipo: 'texto' | 'checkbox' | 'radio';
-    opciones: string[];
-    required: boolean;
-}
+### Modelo User
+```python
+class User(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    email = db.Column(db.String(120), unique=True, nullable=False)
+    password_hash = db.Column(db.String(128), nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    formularios = db.relationship('Formulario', back_populates='owner')
 ```
 
-## 11. Guía de Estilos
+### Modelo Formulario
+```python
+class Formulario(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    nombre = db.Column(db.String(100), nullable=False)
+    email = db.Column(db.String(120), nullable=False)
+    mensaje = db.Column(db.Text, nullable=True)
+    fecha_envio = db.Column(db.DateTime, default=datetime.utcnow)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    preguntas = db.relationship('Pregunta', back_populates='formulario')
+```
 
-### Paleta de Colores
-- Fondo: bg-fondo
-- Texto: text-texto
-- Acento: text-acento
-- Bordes: border-borde
-- Blanco: bg-blanco
+### Modelo Pregunta
+```python
+class Pregunta(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    texto = db.Column(db.String(255), nullable=False)
+    tipo = db.Column(db.String(50), nullable=False)  # 'texto', 'checkbox', 'radio'
+    opciones = db.Column(db.Text)  # JSON string para opciones
+    formulario_id = db.Column(db.Integer, db.ForeignKey('formularios.id'))
+```
 
-### Tipografía
-- Font-family: font-serif
-- Títulos: text-2xl
-- Subtítulos: text-lg
-- Texto normal: text-sm
+## 6. Sistema de Formularios Dinámicos Completo
 
-### Componentes UI
-- Botones primarios: `bg-acento text-blanco rounded hover:opacity-90`
-- Botones secundarios: `border-2 border-acento text-acento hover:bg-acento hover:text-white`
-- Inputs: `p-2 border border-borde rounded bg-fondo`
-- Contenedores: `bg-blanco p-6 border border-borde rounded-lg shadow-sm`
-
-## 12. Flujo de Trabajo
-
-1. **Creación de Formulario**
-   - Usuario accede a /new-form
-   - Completa datos básicos
-   - Agrega preguntas dinámicamente
-   - Configura tipos y opciones
-   - Envía con validación
-
-2. **Proceso de Guardado**
-   - Validación frontend con Yup
-   - Envío con JWT en headers
-   - Almacenamiento en PostgreSQL
-   - Redirección a dashboard
-
-3. **Gestión de Preguntas**
-   - Agregar/eliminar preguntas
-   - Configurar tipo de respuesta
-   - Gestionar opciones para checkbox/radio
-   - Validación específica por tipo
-
-## 13. Seguridad
-
-- Validación en ambos extremos
-- Protección de rutas con JWT
-- Sanitización de inputs
-- Control de acceso por usuario
-- Encriptación de datos sensibles
-
-## 14. Mejoras Futuras
-
-- [ ] Previsualización de formularios
-- [ ] Duplicación de formularios
-- [ ] Plantillas predefinidas
-- [ ] Exportación de respuestas
-- [ ] Análisis de datos
-- [ ] Reportes automáticos
-
-## 15. Sistema de Formularios Dinámicos
-
-### Componentes Principales
-- **NewForm**: Componente principal para creación
-- **PreguntaForm**: Componente para cada pregunta individual
-- **usePreguntasForm**: Hook personalizado para gestión de estado
-
-### Arquitectura de Datos
+### Arquitectura TypeScript
 ```typescript
-// Tipos de preguntas disponibles
-type PreguntaTipo = 'texto' | 'checkbox' | 'radio';
+// Tipos principales
+export type PreguntaTipo = 'texto' | 'checkbox' | 'radio';
 
-// Estructura completa del formulario
-interface FormularioValues {
-    nombre: string;
-    email: string;
-    mensaje: string;
-    preguntas: Pregunta[];
-}
-
-// Estructura de cada pregunta
-interface Pregunta {
+export interface Pregunta {
     id: string;
     texto: string;
     tipo: PreguntaTipo;
     opciones: string[];
     required: boolean;
 }
+
+export interface FormularioValues {
+    nombre: string;
+    email: string;
+    mensaje: string;
+    preguntas: Pregunta[];
+}
+
+export interface FormularioResponse {
+    id: string;
+    nombre: string;
+    email: string;
+    mensaje: string;
+    preguntas: Pregunta[];
+    createdAt: string;
+    userId: string;
+}
 ```
 
-## 16. Estado Actual de Implementación
+### Hook Personalizado para Gestión de Preguntas
+```typescript
+export const usePreguntasForm = () => {
+    const [preguntas, setPreguntas] = useState<Pregunta[]>([]);
+    
+    const agregarPregunta = () => { /* ... */ };
+    const eliminarPregunta = (id: string) => { /* ... */ };
+    const actualizarPregunta = (id: string, campo: keyof Pregunta, valor: any) => { /* ... */ };
+    const agregarOpcion = (preguntaId: string, opcion: string) => { /* ... */ };
+    const eliminarOpcion = (preguntaId: string, index: number) => { /* ... */ };
+    
+    return {
+        preguntas,
+        agregarPregunta,
+        eliminarPregunta,
+        actualizarPregunta,
+        agregarOpcion,
+        eliminarOpcion
+    };
+};
+```
 
-### Frontend
-- [x] Sistema completo de autenticación (registro/login)
-- [x] Creación de formularios dinámicos
-- [x] Validación con Formik + Yup
-- [x] Gestión de estado con hooks personalizados
-- [x] Manejo de rutas protegidas
-- [x] Dashboard para visualizar formularios
-- [x] Diseño responsive con Tailwind CSS
-- [x] Interfaz retro con paleta personalizada
+## 7. Componentes Principales Implementados
 
-### Backend
-- [x] API RESTful con Flask
-- [x] Autenticación JWT
-- [x] Modelos de datos relacionales
-- [x] Validación de datos con Marshmallow
-- [x] Conexión PostgreSQL
-- [x] Migraciones con Alembic
+### NewForm.tsx
+- ✅ Creación de formularios dinámicos
+- ✅ Validación con Formik + Yup
+- ✅ Gestión de preguntas múltiples
+- ✅ Soporte para 3 tipos de preguntas
+- ✅ Navegación post-creación
+- ✅ Integración con autenticación JWT
+
+### PreguntaForm.tsx
+- ✅ Componente reutilizable para cada pregunta
+- ✅ Editor de texto de pregunta
+- ✅ Selector visual de tipo de respuesta
+- ✅ Gestión de opciones para checkbox/radio
+- ✅ Campo obligatorio configurable
+- ✅ Validación en tiempo real
+
+### Navigation.tsx
+- ✅ Navegación consistente en toda la app
+- ✅ Estados activos dinámicos
+- ✅ Diferente UI para usuarios autenticados/no autenticados
+- ✅ Diseño responsive
+- ✅ Integración con contexto de autenticación
+
+### AuthContext.tsx
+- ✅ Manejo global de autenticación
+- ✅ Persistencia de token en localStorage
+- ✅ Estados de loading
+- ✅ Funciones de login, register, logout
+- ✅ Manejo de errores
+- ✅ Redirecciones automáticas
+
+## 8. APIs y Endpoints Implementados
+
+### Autenticación
+```python
+POST /api/auth/register  # Registro de usuarios
+POST /api/auth/login     # Inicio de sesión
+```
+
+### Formularios
+```python
+GET  /api/forms/forms         # Listar formularios del usuario
+POST /api/forms/crear         # Crear nuevo formulario
+DELETE /api/forms/eliminar/<id>  # Eliminar formulario
+POST /api/forms/submit        # Enviar formulario básico
+```
+
+### Validación con Marshmallow
+```python
+class PreguntaSchema(Schema):
+    texto = fields.Str(required=True)
+    tipo = fields.Str(validate=validate.OneOf(['texto', 'checkbox', 'radio']))
+    opciones = fields.List(fields.Str())
+
+class FormularioSchema(Schema):
+    nombre = fields.Str(required=True)
+    email = fields.Email(required=True) 
+    mensaje = fields.Str()
+    preguntas = fields.List(fields.Nested(PreguntaSchema))
+```
+
+## 9. Sistema de Estilos con Tailwind CSS
+
+### Configuración Profesional
+```javascript
+// Paleta de colores moderna
+colors: {
+  primary: { 50: '#f0f9ff', 100: '#e0f2fe', /* ... */ 900: '#0c4a6e' },
+  gray: { 50: '#f9fafb', /* ... */ 900: '#111827' },
+  success: { 50: '#f0fdf4', /* ... */ 600: '#16a34a' },
+  warning: { 50: '#fffbeb', /* ... */ 600: '#d97706' },
+  error: { 50: '#fef2f2', /* ... */ 600: '#dc2626' },
+  // Colores de compatibilidad
+  fondo: '#f9fafb',
+  texto: '#111827',
+  acento: '#0284c7',
+  blanco: '#ffffff',
+  borde: '#d1d5db'
+}
+```
+
+### Componentes CSS Reutilizables
+```css
+/* Botones */
+.btn { /* configuración base */ }
+.btn-primary { /* estilo primario */ }
+.btn-secondary { /* estilo secundario */ }
+
+/* Formularios */
+.input { /* campos de entrada */ }
+.label { /* etiquetas */ }
+.error-text { /* mensajes de error */ }
+
+/* Cards */
+.card { /* contenedor básico */ }
+.card-body { /* contenido del card */ }
+
+/* Animaciones */
+.fade-in { /* animación de entrada */ }
+.hover-lift { /* efecto hover */ }
+```
+
+## 10. Flujo Completo de Usuario
+
+### 1. Registro/Login
+```
+Usuario nuevo → /register → Validación → Creación de cuenta → Redirección a /login
+Usuario existente → /login → Autenticación JWT → Redirección a /dashboard
+```
+
+### 2. Creación de Formularios
+```
+Dashboard → /forms/new → Configurar formulario → Agregar preguntas → Validar → Guardar → /form/:id/view
+```
+
+### 3. Gestión de Preguntas
+```
+Texto libre: Solo requiere título
+Checkbox: Requiere título + mínimo 2 opciones
+Radio: Requiere título + mínimo 2 opciones
+```
+
+### 4. Compartir Formularios
+```
+FormView → Copiar enlace → Compartir → Usuarios completan en /form/:id → Respuestas guardadas
+```
+
+## 11. Funcionalidades de Seguridad
+
+### Autenticación JWT
+- ✅ Tokens seguros con expiración
+- ✅ Headers Authorization en todas las llamadas protegidas
+- ✅ Validación en backend con @jwt_required()
+- ✅ Manejo de tokens expirados
+
+### Validación de Datos
+- ✅ Validación frontend con Yup
+- ✅ Validación backend con Marshmallow
+- ✅ Sanitización de inputs
+- ✅ Protección CORS configurada
+
+### Encriptación
+- ✅ Contraseñas hasheadas con Bcrypt
+- ✅ Variables de entorno para secretos
+- ✅ Configuración separada por ambiente
+
+## 12. Mejoras y Optimizaciones Implementadas
+
+### Performance
+- ✅ Hooks personalizados para lógica reutilizable
+- ✅ Context API optimizado para evitar re-renders
+- ✅ Componentes memoizados donde es necesario
+- ✅ Lazy loading de rutas con React.lazy()
+
+### UX/UI
+- ✅ Navegación intuitiva con breadcrumbs
+- ✅ Estados de loading en todas las operaciones
+- ✅ Mensajes de error claros y específicos
+- ✅ Confirmaciones para acciones destructivas
+- ✅ Diseño responsive mobile-first
+
+### Desarrollo
+- ✅ TypeScript para mayor robustez
+- ✅ Configuración de ESLint y Prettier
+- ✅ Hot reload en desarrollo
+- ✅ Scripts de build optimizados
+- ✅ Estructura de carpetas escalable
+
+## 13. Estado Actual del Proyecto
+
+### ✅ Completado
+- [x] Sistema completo de autenticación con JWT
+- [x] Creación de formularios dinámicos con 3 tipos de preguntas
+- [x] Validación robusta frontend y backend
+- [x] Interfaz de usuario profesional y responsive
+- [x] Navegación y routing completos
+- [x] Base de datos con relaciones y migraciones
+- [x] API RESTful documentada
 - [x] Manejo de errores centralizado
-- [x] CORS configurado
+- [x] Configuración de desarrollo y producción
+- [x] Sistema de componentes reutilizables
+
+### 🚧 En Desarrollo
+- [ ] Vista de respuestas a formularios
+- [ ] Análisis estadístico de respuestas
+- [ ] Exportación de datos (CSV/PDF)
+- [ ] Edición de formularios existentes
+- [ ] Dashboard con métricas
+
+### 📋 Próximas Funcionalidades
+- [ ] Plantillas de formularios predefinidas
+- [ ] Notificaciones por email
+- [ ] Colaboración entre usuarios
+- [ ] API pública documentada
+- [ ] Modo offline con Service Workers
+
+## 14. Configuración de Desarrollo
+
+### Requisitos
+- Node.js 18+ 
+- Python 3.8+
+- PostgreSQL 12+
+
+### Instalación
+```bash
+# Backend
+cd backend
+python -m venv venv
+source venv/bin/activate  # Windows: venv\Scripts\activate
+pip install -r requirements.txt
+flask db upgrade
+python run.py
+
+# Frontend
+cd frontend
+npm install
+npm run dev
+```
+
+### Scripts Disponibles
+```json
+{
+  "dev": "vite",
+  "build": "tsc && vite build", 
+  "preview": "vite preview",
+  "lint": "eslint . --ext ts,tsx"
+}
+```
+
+## 15. Arquitectura de Componentes
+
+### Jerarquía de Componentes
+```
+App.tsx
+├── AuthProvider (Context)
+├── Navigation
+├── Routes
+│   ├── Home
+│   ├── Login/Register
+│   ├── Dashboard
+│   ├── NewForm
+│   │   └── PreguntaForm (múltiples instancias)
+│   ├── FormView
+│   ├── PublicForm
+│   └── PrivateRoute (HOC)
+└── Footer
+```
+
+### Flujo de Datos
+```
+AuthContext → Componentes → API → Base de Datos
+     ↑              ↓
+localStorage ← Token JWT → Headers
+```
+
+## 16. Testing y Quality Assurance
+
+### Testing Manual Completado
+- ✅ Registro de usuarios
+- ✅ Login con credenciales válidas/inválidas
+- ✅ Creación de formularios con diferentes tipos de preguntas
+- ✅ Validación de campos obligatorios
+- ✅ Navegación entre páginas
+- ✅ Persistencia de sesión
+- ✅ Logout y limpieza de tokens
+
+### Próximos Tests Automatizados
+- [ ] Tests unitarios con Jest + Testing Library
+- [ ] Tests de integración de APIs
+- [ ] Tests E2E con Cypress
+- [ ] Tests de performance con Lighthouse
+
+## 17. Deployment y Producción
+
+### Frontend (Vercel/Netlify)
+```bash
+npm run build
+# Build optimizado en /dist
+```
+
+### Backend (Render/Railway)
+```bash
+gunicorn app:app
+# Usando configuración en gunicorn.conf.py
+```
 
 ### Base de Datos
-- [x] Modelo User con relaciones
-- [x] Modelo Formulario con preguntas
-- [x] Modelo Pregunta con tipos dinámicos
-- [x] Migraciones automáticas
+- PostgreSQL en ElephantSQL o Supabase
+- Migraciones automáticas con Flask-Migrate
+- Backups regulares configurados
 
-## 17. Configuración del Entorno
+## 18. Roadmap Futuro
 
-### Variables de Entorno
-```env
-# [.env](http://_vscodecontentref_/1)
-FLASK_ENV=development
-DATABASE_URL=postgresql://postgres:270998@localhost:5432/formularios_db
-JWT_SECRET=li27
-CORS_ORIGIN=http://localhost:5173
+### Q1 2025
+- [ ] Sistema de respuestas públicas
+- [ ] Dashboard con estadísticas
+- [ ] Exportación de datos
 
-# [.env.local](http://_vscodecontentref_/2)
-VITE_API_URL=http://localhost:5000/api
-```
+### Q2 2025
+- [ ] Plantillas de formularios
+- [ ] Colaboración multiusuario
+- [ ] API pública
 
-## 18 Flujo de Autenticación
+### Q3 2025
+- [ ] App móvil con React Native
+- [ ] Integraciones con terceros
+- [ ] Análisis avanzado con IA
 
-### Registro
-1. Usuario ingresa email y contraseña
-2. Frontend valida datos con Yup
-3. Backend verifica disponibilidad de email
-4. Se crea usuario con contraseña hasheada
-5. Redirección a login
+## 19. Contribución y Mantenimiento
 
-### Login
-1. Usuario ingresa credenciales
-2. Completa datos básicos
-3. Agrega preguntas dinámicamente:
-    - Texto libre
-    - Checkbox (múltiple)
-    - Radio (única)
-4. Validación frontend y backend
-5. Almacenamiento en PostgreSQL
+### Documentación Técnica
+- Comentarios en código crítico
+- README actualizado por módulo
+- Documentación de API con Swagger
+- Guías de contribución
 
-## 19 Gestión de Formularios
+### Mantenimiento
+- Actualizaciones de dependencias regulares
+- Monitoreo de seguridad
+- Performance monitoring
+- Logs centralizados
 
-### Creación
-1. Usuario accede a /forms/new
-2. Completa datos básicos
-3. Agrega preguntas dinámicamente:
-    - Texto libre
-    - Checkbox (múltiple)
-    - Radio (única)
-4. Validación frontend y backend
-5. Almacenamineto en PostrgeSQL
+## 20. Recursos y Referencias
 
-### Visualización
-1. Dashboard muestra listado
-2. Opciones de gestión
-    - Ver detalles
-    - Elimnar
-    - (Próximo) Exportar
+### Tecnologías Principales
+- [React Documentation](https://react.dev/)
+- [Vite Documentation](https://vitejs.dev/)
+- [Tailwind CSS](https://tailwindcss.com/)
+- [Flask Documentation](https://flask.palletsprojects.com/)
+- [SQLAlchemy Documentation](https://sqlalchemy.org/)
 
-## 20. Próximas Mejoras
+### Herramientas de Desarrollo
+- VS Code con extensiones React/Python
+- PostgreSQL con pgAdmin
+- Git con GitHub
+- ESLint + Prettier para calidad de código
 
-### Corto Plazo
-- [] Vista previa de formularios
-- [] Duplicación de formularios
-- [] Edición de formularios existentes
-- [] Paginación en dashboard
+---
 
-### Medio Plazo
-- [] Análisis de respuestas
-- [] Gráficos estadísticos
-- [] Exportación PDF/CSV
-- [] Plantillas predefinidas
-
-### Largo Plazo
-- [] Colaboración entre usuarios
-- [] Roles y permisos
-- [] Noticiaciones por email
-- [] API pública documenta da
+**Proyecto mantenido por:** Ezequiel Quintana  
+**Última actualización:** Enero 2025  
+**Estado:** En desarrollo activo ✅
