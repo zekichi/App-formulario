@@ -2,12 +2,10 @@
 
 from database import db
 from datetime import datetime
-from flask_bcrypt import Bcrypt
+from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.orm import validates
 import json
-
-bcrypt = Bcrypt()
 
 class User(db.Model):
     __tablename__ = 'users'
@@ -24,10 +22,10 @@ class User(db.Model):
     )
 
     def set_password(self, password):
-        self.password_hash = bcrypt.generate_password_hash(password).decode()
+        self.password_hash = generate_password_hash(password)
 
     def check_password(self, password):
-        return bcrypt.check_password_hash(self.password_hash, password)
+        return check_password_hash(self.password_hash, password)
 
 class Formulario(db.Model):
     __tablename__ = 'formularios'
@@ -40,7 +38,7 @@ class Formulario(db.Model):
 
     # Nueva columna: relación con usuario
 
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=True)
     owner = db.relationship('User', back_populates='formularios')
 
     def __repr__(self):
@@ -55,7 +53,8 @@ class Pregunta(db.Model):
     texto = db.Column(db.String(255), nullable=False)
     tipo = db.Column(db.String(50), nullable=False)  # e.g., 'texto', 'opcion_multiple'
 
-    opciones = db.Column(db.Text)  # JSON string si lo aplica
+    opciones = db.Column(db.Text, nullable=True)  # JSON string si lo aplica
+    required = db.Column(db.Boolean, default=False)  # AGREGAR ESTA LÍNEA
 
     formulario_id = db.Column(db.Integer, db.ForeignKey('formularios.id'), nullable=False)
 
