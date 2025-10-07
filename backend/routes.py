@@ -116,6 +116,7 @@ def crear_formulario():
             db.session.add(nuevo_formulario)
             db.session.flush()
 
+            # Crear preguntas asociadas
             for p in data.get('preguntas', []):
                 pregunta = Pregunta(
                     texto=p['texto'],
@@ -128,10 +129,12 @@ def crear_formulario():
             db.session.commit()
             logger.info(f"Formulario creado: ID {nuevo_formulario.id}")
             
-            # CAMBIO: Devolver el ID del formulario creado
+            # DEVOLVER: ID del formulario y URL pública
             return jsonify({
                 "message": "Formulario creado con éxito",
-                "formulario_id": nuevo_formulario.id
+                "formulario_id": nuevo_formulario.id,
+                "public_url": f"/form/{nuevo_formulario.id}",
+                "success": True
             }), 201
             
         except Exception as e:
@@ -142,3 +145,37 @@ def crear_formulario():
     except ValidationError as err:
         logger.warning(f"Error de validación: {err.messages}")
         return jsonify({"error": err.messages}), 400
+
+# Agregar endpoint para obtener un formulario específico
+@formulario_bp.route('/formulario/<int:formulario_id>', methods=['GET'])
+@jwt_required()
+def obtener_formulario(formulario_id):
+    try:
+        user_id = get_jwt_identity()
+        formulario = Formulario.query.filter_by(id=formulario_id, user_id=user_id).first()
+        
+        if not formulario:
+            return jsonify({"error": "Formulario no encontrado"}), 404
+            
+        # Obtener preguntas asociadas
+        preguntas = Pregunta.query.filter_by(formulario_id=formulario_id).all()
+        
+        return jsonify({
+            "id": formulario.id,
+            "nombre": formulario.nombre,
+            "email": formulario.email,
+            "mensaje": formulario.mensaje,
+            "fecha_envio": formulario.fecha_envio.isoformat(),
+            "preguntas": [
+                {
+                    "id": p.id,
+                    "texto": p.texto,
+                    "tipo": p.tipo,
+                    "opciones": json.loads(p.opciones) if p.opciones else []
+                } for p in preguntas
+            ]
+        }), 200
+        
+    except Exception as e:
+        logger.error(f"Error al obtener formulario: {str(e)}")
+        return jsonify({"error": "Error al obtener formulario"}), 500

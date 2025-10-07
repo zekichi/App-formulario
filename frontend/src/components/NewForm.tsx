@@ -44,7 +44,6 @@ export default function NewForm() {
         eliminarOpcion
     } = usePreguntasForm();
 
-    // Agregar esta validación antes del submit
     const validateForm = (values: FormularioValues) => {
         if (preguntas.length === 0) {
             return { preguntas: 'Debe agregar al menos una pregunta' };
@@ -101,11 +100,10 @@ export default function NewForm() {
                                     throw new Error(data.error || 'Error al crear formulario');
                                 }
 
-                                // CAMBIO: Navegar al formulario creado en lugar del dashboard
+                                // CAMBIO: Navegar a la página de éxito con el ID del formulario
                                 if (data.formulario_id) {
-                                    navigate(`/form/${data.formulario_id}/view`);
+                                    navigate(`/form/${data.formulario_id}/success`);
                                 } else {
-                                    // Fallback al dashboard si no hay ID
                                     navigate('/dashboard');
                                 }
                             } catch (error: any) {

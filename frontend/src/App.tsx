@@ -10,6 +10,8 @@ import Dashboard from './components/Dashboard';
 import NewForm from './components/NewForm';
 import FormView from './components/FormView';
 import PublicForm from './components/PublicForm';
+import FormSuccess from './components/FormSuccess';
+import FormResponses from './components/FormResponses';
 
 export default function App() {
     return (
@@ -41,10 +43,26 @@ export default function App() {
                             }
                         />
                         <Route
+                            path="/form/:formId/success"
+                            element={
+                                <PrivateRoute>
+                                    <FormSuccess />
+                                </PrivateRoute>
+                            }
+                        />
+                        <Route
                             path="/form/:formId/view"
                             element={
                                 <PrivateRoute>
                                     <FormView />
+                                </PrivateRoute>
+                            }
+                        />
+                        <Route
+                            path="/form/:formId/responses"
+                            element={
+                                <PrivateRoute>
+                                    <FormResponses />
                                 </PrivateRoute>
                             }
                         />
