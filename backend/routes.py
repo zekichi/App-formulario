@@ -1,9 +1,9 @@
 # backend/routes.py
 from flask import Blueprint, request, jsonify
-from flask_jwt_extended import jwt_required, get_jwt_identity
+from flask_jwt_extended import jwt_required, get_jwt_identity, create_access_token
 from marshmallow import Schema, fields, validate, ValidationError
 from database import db
-from models import Formulario, Pregunta
+from models import Formulario, Pregunta, User  # AGREGAR User aquí
 import json
 import logging
 
@@ -37,8 +37,6 @@ def register():
         if not data or not data.get('email') or not data.get('password'):
             return jsonify({'error': 'Email y contraseña son requeridos'}), 400
         
-        from models import User
-        
         # Check if user already exists
         existing_user = User.query.filter_by(email=data['email']).first()
         if existing_user:
@@ -61,30 +59,56 @@ def register():
 @auth_bp.route('/login', methods=['POST'])
 def login():
     try:
+        print("=== INICIO LOGIN DEBUG ===")
+        
         data = request.get_json()
+        print("1. Datos recibidos:", data)
         
         if not data or not data.get('email') or not data.get('password'):
+            print("2. Error: Faltan datos")
             return jsonify({'error': 'Email y contraseña son requeridos'}), 400
         
-        from models import User
-        from flask_jwt_extended import create_access_token
+        email = data.get('email')
+        password = data.get('password')
+        print(f"3. Buscando usuario: {email}")
         
-        user = User.query.filter_by(email=data['email']).first()
+        user = User.query.filter_by(email=email).first()
+        print(f"4. Usuario encontrado: {user is not None}")
         
-        if user and user.check_password(data['password']):
+        if not user:
+            print("5. Usuario no existe")
+            return jsonify({'error': 'Credenciales inválidas'}), 401
+        
+        print("6. Verificando contraseña...")
+        password_valid = user.check_password(password)
+        print(f"7. Contraseña válida: {password_valid}")
+        
+        if password_valid:
+            print("8. Generando token...")
             access_token = create_access_token(identity=user.id)
-            return jsonify({
+            print("9. Token generado exitosamente")
+            
+            response_data = {
                 'access_token': access_token,
                 'user': {
                     'id': user.id,
                     'email': user.email
                 }
-            }), 200
+            }
+            print("10. Respuesta preparada:", response_data)
+            print("=== FIN LOGIN DEBUG ===")
+            return jsonify(response_data), 200
         else:
+            print("11. Contraseña inválida")
             return jsonify({'error': 'Credenciales inválidas'}), 401
             
     except Exception as e:
-        logger.error(f"Error en login: {str(e)}")
+        print("=== ERROR EN LOGIN ===")
+        print("Error:", str(e))
+        print("Tipo de error:", type(e))
+        import traceback
+        print("Traceback completo:")
+        traceback.print_exc()
         return jsonify({'error': 'Error interno del servidor'}), 500
 
 # Formulario routes

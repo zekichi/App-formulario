@@ -3,77 +3,63 @@
 from database import db
 from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
-from sqlalchemy.ext.hybrid import hybrid_property
-from sqlalchemy.orm import validates
-import json
 
 class User(db.Model):
     __tablename__ = 'users'
-
+    
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(120), unique=True, nullable=False)
     password_hash = db.Column(db.String(128), nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
-
-    formularios = db.relationship(
-        'Formulario',
-        back_populates='owner',
-        cascade='all, delete-orphan'
-    )
-
+    
+    # Relationships
+    formularios = db.relationship('Formulario', back_populates='owner', cascade='all, delete-orphan')
+    
     def set_password(self, password):
+        """Hashear la contraseña"""
         self.password_hash = generate_password_hash(password)
-
+    
     def check_password(self, password):
+        """Verificar la contraseña"""
         return check_password_hash(self.password_hash, password)
+    
+    def __repr__(self):
+        return f'<User {self.email}>'
 
 class Formulario(db.Model):
     __tablename__ = 'formularios'
-
+    
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     nombre = db.Column(db.String(100), nullable=False)
     email = db.Column(db.String(120), nullable=False)
     mensaje = db.Column(db.Text, nullable=True)
     fecha_envio = db.Column(db.DateTime, default=datetime.utcnow)
-
-    # Nueva columna: relación con usuario
-
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=True)
+    
+    # Relationships
     owner = db.relationship('User', back_populates='formularios')
+    preguntas = db.relationship('Pregunta', back_populates='formulario', cascade='all, delete-orphan')
 
     def __repr__(self):
-        return f"<Formulario {self.id} - {self.nombre}>"
-
-    preguntas = db.relationship('Pregunta', back_populates='formulario', cascade='all, delete-orphan')
+        return f'<Formulario {self.nombre}>'
 
 class Pregunta(db.Model):
     __tablename__ = 'preguntas'
-
+    
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     texto = db.Column(db.String(255), nullable=False)
-    tipo = db.Column(db.String(50), nullable=False)  # e.g., 'texto', 'opcion_multiple'
-
-    opciones = db.Column(db.Text, nullable=True)  # JSON string si lo aplica
-    required = db.Column(db.Boolean, default=False)  # AGREGAR ESTA LÍNEA
-
+    tipo = db.Column(db.String(50), nullable=False)  # 'texto', 'checkbox', 'radio'
+    opciones = db.Column(db.Text, nullable=True)  # JSON string para opciones
+    required = db.Column(db.Boolean, default=False)  # AGREGAR este campo
     formulario_id = db.Column(db.Integer, db.ForeignKey('formularios.id'), nullable=False)
-
+    
+    # Relationship
     formulario = db.relationship('Formulario', back_populates='preguntas')
 
-    @validates('tipo')
-    def validar_tipo(self, key, tipo):
-        tipos_validos = ['texto', 'checkbox', 'radio']
-        if tipo not in tipos_validos:
-            raise ValueError(f"Tipo inválido. Debe ser uno de: {tipos_validos}")
-        return tipo
-    
-    @hybrid_property
-    def opciones_lista(self):
-        """Retorna las opciones como lista Python"""
-        return json.loads(self.opciones) if self.opciones else []
-
 class Respuesta(db.Model):
+    __tablename__ = 'respuesta'
+    
     id = db.Column(db.Integer, primary_key=True)
-    pregunta_id = db.Column(db.Integer, db.ForeignKey('preguntas.id'))
-    respuesta = db.Column(db.Text)
+    pregunta_id = db.Column(db.Integer, db.ForeignKey('preguntas.id'), nullable=False)
+    respuesta = db.Column(db.Text, nullable=True)
     fecha = db.Column(db.DateTime, default=datetime.utcnow)

@@ -35,10 +35,11 @@ def create_app():
     app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')    
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET', 'dev-secret-key')
+    app.config['JWT_ACCESS_TOKEN_EXPIRES'] = False  # No expiren los tokens en desarrollo
 
     # Inicializar extenciones
     db.init_app(app)
-    jwt = JWTManager(app)
+    jwt = JWTManager(app)  # ASEGÚRATE DE QUE ESTA LÍNEA ESTÉ
     migrate = Migrate(app, db)
 
     # Registrar blueprints
