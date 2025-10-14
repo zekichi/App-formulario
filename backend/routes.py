@@ -3,9 +3,9 @@ from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity, create_access_token
 from marshmallow import Schema, fields, validate, ValidationError
 from database import db
-from models import Formulario, Pregunta, User  # AGREGAR User aquí
+from models import Formulario, Pregunta, User
 import json
-import logging
+import logging  # ASEGÚRATE DE QUE ESTE IMPORT ESTÉ
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -56,58 +56,40 @@ def register():
         logger.error(f"Error en registro: {str(e)}")
         return jsonify({'error': 'Error interno del servidor'}), 500
 
+# En routes.py, reemplaza el endpoint login con esto:
 @auth_bp.route('/login', methods=['POST'])
 def login():
     try:
-        print("=== INICIO LOGIN DEBUG ===")
+        print("=== ENDPOINT ALCANZADO ===")
         
         data = request.get_json()
-        print("1. Datos recibidos:", data)
+        print("Datos recibidos:", data)
         
-        if not data or not data.get('email') or not data.get('password'):
-            print("2. Error: Faltan datos")
-            return jsonify({'error': 'Email y contraseña son requeridos'}), 400
-        
+        if not data:
+            print("No se recibieron datos")
+            return jsonify({'error': 'No data received'}), 400
+            
         email = data.get('email')
         password = data.get('password')
-        print(f"3. Buscando usuario: {email}")
+        print(f"Email: {email}, Password length: {len(password) if password else 0}")
         
-        user = User.query.filter_by(email=email).first()
-        print(f"4. Usuario encontrado: {user is not None}")
-        
-        if not user:
-            print("5. Usuario no existe")
-            return jsonify({'error': 'Credenciales inválidas'}), 401
-        
-        print("6. Verificando contraseña...")
-        password_valid = user.check_password(password)
-        print(f"7. Contraseña válida: {password_valid}")
-        
-        if password_valid:
-            print("8. Generando token...")
-            access_token = create_access_token(identity=user.id)
-            print("9. Token generado exitosamente")
-            
-            response_data = {
+        # Test sin base de datos primero
+        if email == 'test@test.com' and password == '123456':
+            print("Credenciales correctas - generando token")
+            access_token = create_access_token(identity=1)
+            return jsonify({
                 'access_token': access_token,
-                'user': {
-                    'id': user.id,
-                    'email': user.email
-                }
-            }
-            print("10. Respuesta preparada:", response_data)
-            print("=== FIN LOGIN DEBUG ===")
-            return jsonify(response_data), 200
+                'user': {'id': 1, 'email': 'test@test.com'}
+            }), 200
         else:
-            print("11. Contraseña inválida")
+            print("Credenciales incorrectas")
             return jsonify({'error': 'Credenciales inválidas'}), 401
             
     except Exception as e:
-        print("=== ERROR EN LOGIN ===")
+        print("ERROR EN LOGIN:")
         print("Error:", str(e))
-        print("Tipo de error:", type(e))
+        print("Type:", type(e))
         import traceback
-        print("Traceback completo:")
         traceback.print_exc()
         return jsonify({'error': 'Error interno del servidor'}), 500
 
